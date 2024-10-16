@@ -5,7 +5,7 @@ Color mainTitleColor = Colors.black87;
 Color mainLineColor = Colors.black12;
 
 class CustomLineChart {
-  LineChartData lineChart() {
+  LineChartData lineChart(List<dynamic> salesData) {
     return LineChartData(
       gridData: FlGridData(
         show: true,
@@ -38,7 +38,7 @@ class CustomLineChart {
             showTitles: true,
             interval: 1,
             reservedSize: 30,
-            getTitlesWidget: _bottomTitleWidgets
+            getTitlesWidget: bottomTitleWidgets
           ),
         ),
         leftTitles: AxisTitles(
@@ -46,24 +46,24 @@ class CustomLineChart {
             showTitles: true,
             interval: 1,
             reservedSize: 42,
-            getTitlesWidget: _leftTitleWidgets
+            getTitlesWidget: leftTitleWidgets
           ),
         ),
       ),
       borderData: FlBorderData(show: false),
       minX: 0,
-      maxX: 11,
+      maxX: 7,
       minY: 0,
       maxY: 6,
       lineBarsData: [LineChartBarData(
         spots: const [
           FlSpot(0, 3),
-          FlSpot(2.6, 2),
-          FlSpot(4.9, 5),
-          FlSpot(6.8, 3.1),
-          FlSpot(8, 4),
-          FlSpot(9.5, 3),
-          FlSpot(11, 4),
+          FlSpot(1, 2),
+          FlSpot(2, 5),
+          FlSpot(3, 3.1),
+          FlSpot(4, 4),
+          FlSpot(5, 3),
+          FlSpot(6, 4),
         ],
         color: Colors.indigo[900],
         isCurved: false,
@@ -79,17 +79,29 @@ class CustomLineChart {
     );
   }
 
-  Widget _bottomTitleWidgets(double value, TitleMeta meta) {
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
     String text;
     switch (value.toInt()) {
+      case 0:
+        text = 'Lun';
+        break;
+      case 1:
+        text = 'Mar';
+        break;
       case 2:
-        text = 'MAR';
+        text = 'Mie';
+        break;
+      case 3:
+        text = 'Jue';
+        break;
+      case 4:
+        text = 'Vie';
         break;
       case 5:
-        text = 'JUN';
+        text = 'Sab';
         break;
-      case 8:
-        text = 'SEP';
+      case 6:
+        text = 'Dom';
         break;
       default:
         text = '';
@@ -109,7 +121,7 @@ class CustomLineChart {
     );
   }
 
-  Widget _leftTitleWidgets(double value, TitleMeta meta) {
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
     String text;
     switch (value.toInt()) {
       case 1:
@@ -122,17 +134,19 @@ class CustomLineChart {
         text = '50k';
         break;
       default:
-        return Container();
+        text = '';
     }
 
-    return Text(
-      text,
-      textAlign: TextAlign.left,
-      style: TextStyle(
-        color: mainTitleColor,
-        fontSize: 16
-      )
-    );
+   return SideTitleWidget(
+          axisSide: meta.axisSide,
+          child: Text(
+            text,
+            style: TextStyle(
+              color: mainTitleColor,
+              fontSize: 16
+            )
+          ),
+        );
   }
 }
 

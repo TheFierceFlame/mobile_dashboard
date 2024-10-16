@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             FadeInDown(
               duration: const Duration(milliseconds: 1500),
-              child: Image.asset('assets/images/Logo.png')
+              child: Image.asset('images/Logo.png')
             ),
             const SizedBox(height: 50),
             FadeIn(
