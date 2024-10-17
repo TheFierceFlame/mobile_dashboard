@@ -25,7 +25,7 @@ class CSVSale {
 
   factory CSVSale.fromCSV(List<dynamic> entry) => CSVSale(
     transactionID: entry[0],
-    date: DateFormat("yyyy-mm-dd").parse(entry[1] + ' 00:00:00.000'),
+    date: DateFormat("yyyy-MM-dd").parse('${entry[1]} 00:00:00.000'),
     customerID: entry[2],
     gender: entry[3],
     age: entry[4],

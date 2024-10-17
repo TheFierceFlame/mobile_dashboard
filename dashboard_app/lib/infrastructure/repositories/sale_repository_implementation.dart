@@ -14,21 +14,21 @@ class SalesRepositoryImplementation extends SalesRepository {
 
   @override
   Future<List<Sale>> getWeeklySales() {
-    return datasource.getDailySales();
+    return datasource.getWeeklySales();
   }
 
   @override
   Future<List<Sale>> getMonthlySales() {
-    return datasource.getDailySales();
+    return datasource.getMonthlySales();
   }
 
   @override
   Future<List<Sale>> getTopSellingProducts() {
-    return datasource.getDailySales();
+    return datasource.getTopSellingProducts();
   }
 
   @override
   Future<List<Sale>> getTopBuyingCustomers() {
-    return datasource.getDailySales();
+    return datasource.getTopBuyingCustomers();
   }
 }

@@ -1,8 +1,11 @@
-import 'package:animate_do/animate_do.dart';
+import 'package:dashboard_app/presentation/widgets/charts/top_buying_customers_chart.dart';
+import 'package:dashboard_app/presentation/widgets/charts/top_selling_products_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dashboard_app/presentation/providers/analytics/sales/sales_provider.dart';
+import 'package:animate_do/animate_do.dart';
+import 'package:dashboard_app/presentation/widgets/charts/monthly_sales_chart.dart';
+import 'package:dashboard_app/presentation/widgets/charts/weekly_sales_chart.dart';
+import 'package:dashboard_app/presentation/providers/providers.dart';
 import 'package:dashboard_app/presentation/widgets/widgets.dart';
 
 class AnalyticsScreen extends ConsumerStatefulWidget {
@@ -14,90 +17,34 @@ class AnalyticsScreen extends ConsumerStatefulWidget {
 
 class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   bool loading = true;
-  CustomLineChart ventasDiariasChart = CustomLineChart();
-  CustomLineChart ventasSemanalesChart = CustomLineChart();
-  CustomLineChart ventasMensualesChart = CustomLineChart();
 
   @override
   void initState() {
     super.initState();
     ref.read(dailySalesProvider.notifier).loadData();
+    ref.read(weeklySalesProvider.notifier).loadData();
+    ref.read(monthlySalesProvider.notifier).loadData();
+    ref.read(topSellingProductsProvider.notifier).loadData();
+    ref.read(topBuyingCustomersProvider.notifier).loadData();
   }
 
   @override
   Widget build(BuildContext context) {
+    final initialLoading = ref.watch(initialLoadingProvider);
+
+    if(initialLoading) return const FullScreenLoader();
+
     final dailySales = ref.watch(dailySalesProvider);
-    final dailySalesTitles = <SideTitleWidget Function(double value, TitleMeta meta)>[
-      (double value, TitleMeta meta) {
-        String text;
-        switch (value.toInt()) {
-          case 0:
-            text = 'Lun';
-            break;
-          case 1:
-            text = 'Mar';
-            break;
-          case 2:
-            text = 'Mie';
-            break;
-          case 3:
-            text = 'Jue';
-            break;
-          case 4:
-            text = 'Vie';
-            break;
-          case 5:
-            text = 'Sab';
-            break;
-          case 6:
-            text = 'Dom';
-            break;
-          default:
-            text = '';
-            break;
-        }
-
-        return SideTitleWidget(
-          axisSide: meta.axisSide,
-          child: Text(
-            text,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: mainTitleColor,
-              fontSize: 16
-            )
-          ),
-        );
-      },
-      (double value, TitleMeta meta) {
-        String text;
-        switch (value.toInt()) {
-          case 1:
-            text = '10K';
-            break;
-          case 3:
-            text = '30k';
-            break;
-          case 5:
-            text = '50k';
-            break;
-          default:
-            text = '';
-        }
-
-        return SideTitleWidget(
-          axisSide: meta.axisSide,
-          child: Text(
-            text,
-            style: TextStyle(
-              color: mainTitleColor,
-              fontSize: 16
-            )
-          ),
-        );
-      }
-    ];
-
+    final weeklySales = ref.watch(weeklySalesProvider);
+    final monthlySales = ref.watch(monthlySalesProvider);
+    final topSellingProducts = ref.watch(topSellingProductsProvider);
+    final topBuyingCustomers = ref.watch(topBuyingCustomersProvider);
+    DailySalesChart ventasDiariasChart = DailySalesChart(dailySalesData: dailySales);
+    WeeklySalesChart ventasSemanalesChart = WeeklySalesChart(weeklySalesData: weeklySales);
+    MonthlySalesChart ventasMensualesChart = MonthlySalesChart(monthlySalesData: monthlySales);
+    TopSellingProductsChart topProductosVentas = TopSellingProductsChart(topSellingProductsData: topSellingProducts);
+    TopBuyingCustomersChart topClientesCompras = TopBuyingCustomersChart(topBuyingCustomersData: topBuyingCustomers);
+    
     return Scaffold(
       backgroundColor: Colors.black12,
       appBar: AppBar(
@@ -132,14 +79,17 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Sucursal A de la Empresa',
+                          'Sucursal A de la Empresa X',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.black87,
                             fontSize: 18
                           ),
                         ),
-                        Icon(Icons.arrow_drop_down, color: Colors.black87,)
+                        Icon(
+                          Icons.arrow_drop_down, 
+                          color: Colors.black87
+                        )
                       ],
                     ),
                   )
@@ -148,46 +98,26 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               Expanded(
                 child: ListView(
                   children: [
-                    FadeInUp(
-                      duration: const Duration(milliseconds: 500),
-                      delay: const Duration(milliseconds: 300),
-                      child: ChartCard(
-                        chartTitle: 'Ventas diarias',
-                        chartTypeData: LineChart(ventasDiariasChart.lineChart(dailySales)),
-                      ),
+                    ChartCard(
+                      chartTitle: 'Ventas diarias',
+                      chartType: ventasDiariasChart,
                     ),
-                    FadeInUp(
-                      duration: const Duration(milliseconds: 500),
-                      delay: const Duration(milliseconds: 300),
-                      child: ChartCard(
-                        chartTitle: 'Ventas semanales',
-                        chartTypeData: LineChart(ventasSemanalesChart.lineChart(dailySales)),
-                      ),
+                    ChartCard(
+                      chartTitle: 'Ventas semanales',
+                      chartType: ventasSemanalesChart,
                     ),
-                    FadeInUp(
-                      duration: const Duration(milliseconds: 500),
-                      delay: const Duration(milliseconds: 300),
-                      child: ChartCard(
-                        chartTitle: 'Ventas mensuales',
-                        chartTypeData: LineChart(ventasMensualesChart.lineChart(dailySales)),
-                      ),
+                    ChartCard(
+                      chartTitle: 'Ventas mensuales',
+                      chartType: ventasMensualesChart,
                     ),
-                    FadeInUp(
-                      duration: const Duration(milliseconds: 500),
-                      delay: const Duration(milliseconds: 300),
-                      child: ChartCard(
-                        chartTitle: 'Productos más vendidos',
-                        chartTypeData: LineChart(ventasDiariasChart.lineChart(dailySales)),
-                      ),
+                    ChartCard(
+                      chartTitle: 'Productos más vendidos',
+                      chartType: topProductosVentas,
                     ),
-                    FadeInUp(
-                      duration: const Duration(milliseconds: 500),
-                      delay: const Duration(milliseconds: 300),
-                      child: ChartCard(
-                        chartTitle: 'Clientes que más compran',
-                        chartTypeData: LineChart(ventasDiariasChart.lineChart(dailySales)),
-                      ),
-                    ),
+                    ChartCard(
+                      chartTitle: 'Clientes que más compran',
+                      chartType: topClientesCompras,
+                    )
                   ],
                 ),
               ),
@@ -199,46 +129,45 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   }
 }
 
-class ChartCard extends ConsumerStatefulWidget {
+class ChartCard extends StatelessWidget {
   final String chartTitle;
-  final Widget chartTypeData;
+  final Widget chartType;
 
   const ChartCard({
     super.key,
     required this.chartTitle,
-    required this.chartTypeData
+    required this.chartType
   });
 
   @override
-  ChartCardState createState() => ChartCardState();
-}
-
-class ChartCardState extends ConsumerState<ChartCard> {
-  @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          children: [
-            Text(
-              widget.chartTitle, 
-              style: const TextStyle(
-                color: Colors.black87,
-                fontSize: 18
-              )
-            ),
-            const SizedBox(height: 20),
-            Container(
-              height: 252,
-              width: 380,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16)
+    return FadeInUp(
+      duration: const Duration(milliseconds: 500),
+      delay: const Duration(milliseconds: 300),
+      child: Card(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              Text(
+                chartTitle, 
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 18
+                )
               ),
-              child: widget.chartTypeData
-            ),
-          ],
+              const SizedBox(height: 20),
+              Container(
+                height: 252,
+                width: 380,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16)
+                ),
+                child: chartType
+              ),
+            ],
+          ),
         ),
       ),
     );

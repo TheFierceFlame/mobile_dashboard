@@ -8,6 +8,30 @@ final dailySalesProvider = StateNotifierProvider<SalesNotifier, List<Sale>>((ref
   return SalesNotifier(fetchSales: fetchSales);
 });
 
+final weeklySalesProvider = StateNotifierProvider<SalesNotifier, List<Sale>>((ref) {
+  final fetchSales = ref.watch(salesRepositoryProvider).getWeeklySales;
+
+  return SalesNotifier(fetchSales: fetchSales);
+});
+
+final monthlySalesProvider = StateNotifierProvider<SalesNotifier, List<Sale>>((ref) {
+  final fetchSales = ref.watch(salesRepositoryProvider).getMonthlySales;
+
+  return SalesNotifier(fetchSales: fetchSales);
+});
+
+final topSellingProductsProvider = StateNotifierProvider<SalesNotifier, List<Sale>>((ref) {
+  final fetchSales = ref.watch(salesRepositoryProvider).getTopSellingProducts;
+
+  return SalesNotifier(fetchSales: fetchSales);
+});
+
+final topBuyingCustomersProvider = StateNotifierProvider<SalesNotifier, List<Sale>>((ref) {
+  final fetchSales = ref.watch(salesRepositoryProvider).getTopBuyingCustomers;
+
+  return SalesNotifier(fetchSales: fetchSales);
+});
+
 typedef SalesCallback = Future<List<Sale>> Function();
 
 class SalesNotifier extends StateNotifier<List<Sale>> {  
