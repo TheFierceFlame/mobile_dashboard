@@ -8,6 +8,7 @@ import 'package:dashboard_app/presentation/widgets/charts/monthly_sales_chart.da
 import 'package:dashboard_app/presentation/widgets/charts/weekly_sales_chart.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
 import 'package:dashboard_app/presentation/widgets/widgets.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class AnalyticsScreen extends ConsumerStatefulWidget {
   const AnalyticsScreen({super.key});
@@ -41,6 +42,7 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     final topSellingProducts = ref.watch(topSellingProductsProvider);
     final topBuyingCustomers = ref.watch(topBuyingCustomersProvider);
     DailySalesChart ventasDiariasChart = DailySalesChart(dailySalesData: dailySales);
+
     WeeklySalesChart ventasSemanalesChart = WeeklySalesChart(weeklySalesData: weeklySales);
     MonthlySalesChart ventasMensualesChart = MonthlySalesChart(monthlySalesData: monthlySales);
     TopSellingProductsChart topProductosVentas = TopSellingProductsChart(topSellingProductsData: topSellingProducts);
@@ -102,22 +104,27 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                     ChartCard(
                       chartTitle: 'Ventas diarias',
                       chartType: ventasDiariasChart,
+                      chartFilters: const CustomFilters()
                     ),
                     ChartCard(
                       chartTitle: 'Ventas semanales',
                       chartType: ventasSemanalesChart,
+                      chartFilters: const CustomFilters(),
                     ),
                     ChartCard(
                       chartTitle: 'Ventas mensuales',
                       chartType: ventasMensualesChart,
+                      chartFilters: const CustomFilters(),
                     ),
                     ChartCard(
                       chartTitle: 'Productos más vendidos',
                       chartType: topProductosVentas,
+                      chartFilters: const CustomFilters(),
                     ),
                     ChartCard(
                       chartTitle: 'Clientes que más compran',
                       chartType: topClientesCompras,
+                      chartFilters: const CustomFilters(),
                     )
                   ],
                 ),
@@ -133,11 +140,13 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 class ChartCard extends StatelessWidget {
   final String chartTitle;
   final Widget chartType;
+  final Widget chartFilters;
 
   const ChartCard({
     super.key,
     required this.chartTitle,
-    required this.chartType
+    required this.chartType,
+    required this.chartFilters
   });
 
   @override
@@ -145,29 +154,57 @@ class ChartCard extends StatelessWidget {
     return FadeInUp(
       duration: const Duration(milliseconds: 500),
       delay: const Duration(milliseconds: 300),
-      child: Card(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Slidable(
+          endActionPane: ActionPane(
+            extentRatio: 0.5,
+            motion: const DrawerMotion(),
             children: [
-              Text(
-                chartTitle, 
-                style: const TextStyle(
-                  color: Colors.black87,
-                  fontSize: 18
+              SlidableAction(
+                label: 'Filtrar',
+                backgroundColor: Colors.indigo[900]!,
+                foregroundColor: Colors.white,
+                icon: Icons.filter_list,
+                borderRadius: BorderRadius.circular(16),
+                onPressed: (_) => showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return chartFilters;
+                  }
                 )
-              ),
-              const SizedBox(height: 20),
-              Container(
-                height: 252,
-                width: 380,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16)
-                ),
-                child: chartType
-              ),
+              )
             ],
+          ),
+          child: Container(
+            margin: const EdgeInsets.only(right: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16)
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                children: [
+                  Text(
+                    chartTitle, 
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 18
+                    )
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 252,
+                    width: 380,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16)
+                    ),
+                    child: chartType
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
