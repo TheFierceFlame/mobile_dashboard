@@ -32,7 +32,7 @@ final topBuyingCustomersProvider = StateNotifierProvider<SalesNotifier, List<Sal
   return SalesNotifier(fetchSales: fetchSales);
 });
 
-typedef SalesCallback = Future<List<Sale>> Function();
+typedef SalesCallback = Future<List<Sale>> Function(List<dynamic>);
 
 class SalesNotifier extends StateNotifier<List<Sale>> {  
   bool isLoading = false;
@@ -42,14 +42,14 @@ class SalesNotifier extends StateNotifier<List<Sale>> {
     required this.fetchSales,
   }): super([]);
 
-  Future<void> loadData() async{
+  Future<void> loadData(List<dynamic> salesFilters) async{
     if (isLoading) return;
 
     isLoading = true;
 
-    final List<Sale> sales = await fetchSales();
+    final List<Sale> sales = await fetchSales(salesFilters);
     
-    state = [...state, ...sales];
+    state = sales;
     
     await Future.delayed(const Duration(milliseconds: 300));
     isLoading = false;

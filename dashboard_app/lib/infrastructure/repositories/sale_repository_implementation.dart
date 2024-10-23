@@ -8,27 +8,27 @@ class SalesRepositoryImplementation extends SalesRepository {
   SalesRepositoryImplementation(this.datasource);
 
   @override
-  Future<List<Sale>> getDailySales() {
-    return datasource.getDailySales();
+  Future<List<Sale>> getDailySales(List<dynamic> salesFilters) {
+    return datasource.getDailySales(salesFilters);
   }
 
   @override
-  Future<List<Sale>> getWeeklySales() {
-    return datasource.getWeeklySales();
+  Future<List<Sale>> getWeeklySales(List<dynamic> salesFilters) {
+    return datasource.getWeeklySales(salesFilters);
   }
 
   @override
-  Future<List<Sale>> getMonthlySales() {
-    return datasource.getMonthlySales();
+  Future<List<Sale>> getMonthlySales(List<dynamic> salesFilters) {
+    return datasource.getMonthlySales(salesFilters);
   }
 
   @override
-  Future<List<Sale>> getTopSellingProducts() {
-    return datasource.getTopSellingProducts();
+  Future<List<Sale>> getTopSellingProducts(List<dynamic> salesFilters) {
+    return datasource.getTopSellingProducts(salesFilters);
   }
 
   @override
-  Future<List<Sale>> getTopBuyingCustomers() {
-    return datasource.getTopBuyingCustomers();
+  Future<List<Sale>> getTopBuyingCustomers(List<dynamic> salesFilters) {
+    return datasource.getTopBuyingCustomers(salesFilters);
   }
 }

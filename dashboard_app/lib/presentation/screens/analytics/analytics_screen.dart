@@ -1,3 +1,4 @@
+import 'package:dashboard_app/presentation/providers/analytics/filters_provider.dart';
 import 'package:dashboard_app/presentation/widgets/charts/top_buying_customers_chart.dart';
 import 'package:dashboard_app/presentation/widgets/charts/top_selling_products_chart.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +22,11 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(dailySalesProvider.notifier).loadData();
-    ref.read(weeklySalesProvider.notifier).loadData();
-    ref.read(monthlySalesProvider.notifier).loadData();
-    ref.read(topSellingProductsProvider.notifier).loadData();
-    ref.read(topBuyingCustomersProvider.notifier).loadData();
+    ref.read(dailySalesProvider.notifier).loadData(ref.read(dailySalesFiltersProvider));
+    ref.read(weeklySalesProvider.notifier).loadData(ref.read(weeklySalesFiltersProvider));
+    ref.read(monthlySalesProvider.notifier).loadData(ref.read(monthlySalesFiltersProvider));
+    ref.read(topSellingProductsProvider.notifier).loadData(ref.read(topSellingProductsFiltersProvider));
+    ref.read(topBuyingCustomersProvider.notifier).loadData(ref.read(topBuyingCustomersFiltersProvider));
   }
 
   @override

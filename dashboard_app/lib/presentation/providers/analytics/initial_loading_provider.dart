@@ -7,7 +7,7 @@ final initialLoadingProvider = Provider<bool>((ref) {
   final step3 = ref.watch(monthlySalesProvider).isEmpty;
   final step4 = ref.watch(topSellingProductsProvider).isEmpty;
   final step5 = ref.watch(topBuyingCustomersProvider).isEmpty;
-  //print(step5);
+  
   if(step1 || step2 || step3 || step4 || step5) return true;
 
   return false;

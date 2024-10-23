@@ -9,7 +9,7 @@ class CSVSalesDatasource extends SalesDatasource {
   final String csvPath = 'data/sales/retail_sales_dataset.csv';
 
   @override
-  Future<List<Sale>> getDailySales() async {
+  Future<List<Sale>> getDailySales(List<dynamic> salesFilters) async {
     final rawData = await rootBundle.loadString(csvPath);
     List<Sale> sales = _getSales(rawData);
     List<Sale> finalSales = [];
@@ -17,7 +17,11 @@ class CSVSalesDatasource extends SalesDatasource {
     sales = _orderSalesByDate(sales);
 
     for (int iteration = 0; iteration < sales.length; iteration++) {
-      if((sales[iteration].date).isAfter(sales.last.date.subtract(const Duration(days: 1)))) {
+      if ((sales[iteration].date).isAfter(
+        DateTime.parse(salesFilters[0]).compareTo(DateTime.parse('1900-01-01T00:00:00.00')) == 1
+        ? DateTime.parse(salesFilters[0])
+        : sales.last.date.subtract(const Duration(days: 1)))
+      ) {
         finalSales.add(sales[iteration]);
       }
     }
@@ -26,7 +30,7 @@ class CSVSalesDatasource extends SalesDatasource {
   }
   
   @override
-  Future<List<Sale>> getWeeklySales() async {
+  Future<List<Sale>> getWeeklySales(List<dynamic> salesFilters) async {
     final rawData = await rootBundle.loadString(csvPath);
     List<Sale> sales = _getSales(rawData);
     List<Sale> finalSales = [];
@@ -34,7 +38,15 @@ class CSVSalesDatasource extends SalesDatasource {
     sales = _orderSalesByDate(sales);
     
     for (int iteration = 0; iteration < sales.length; iteration++) {
-      if((sales[iteration].date).isAfter(sales.last.date.subtract(const Duration(days: 7)))) {
+      if ((sales[iteration].date).isAfter(
+        DateTime.parse(salesFilters[0]).compareTo(DateTime.parse('1900-01-01T00:00:00.00')) == 1
+        ? DateTime.parse(salesFilters[0])
+        : sales.last.date.subtract(const Duration(days: 7))
+      ) && sales[iteration].date.isBefore(
+        DateTime.parse(salesFilters[0]).compareTo(DateTime.parse('1900-01-01T00:00:00.00')) == 1
+        ? DateTime.parse(salesFilters[1]).add(const Duration(days: 1))
+        : sales.last.date.add(const Duration(days: 1))
+      )) {
         finalSales.add(sales[iteration]);
       }
     }
@@ -43,7 +55,7 @@ class CSVSalesDatasource extends SalesDatasource {
   }
 
   @override
-  Future<List<Sale>> getMonthlySales() async {
+  Future<List<Sale>> getMonthlySales(List<dynamic> salesFilters) async {
     final rawData = await rootBundle.loadString(csvPath);
     List<Sale> sales = _getSales(rawData);
     List<Sale> finalSales = [];
@@ -51,7 +63,15 @@ class CSVSalesDatasource extends SalesDatasource {
     sales = _orderSalesByDate(sales);
 
     for (int iteration = 0; iteration < sales.length; iteration++) {
-      if((sales[iteration].date).isAfter(sales.last.date.subtract(const Duration(days: 28)))) {
+      if ((sales[iteration].date).isAfter(
+        DateTime.parse(salesFilters[0]).compareTo(DateTime.parse('1900-01-01T00:00:00.00')) == 1
+        ? DateTime.parse(salesFilters[0])
+        : sales.last.date.subtract(const Duration(days: 28)))
+      && sales[iteration].date.isBefore(
+        DateTime.parse(salesFilters[0]).compareTo(DateTime.parse('1900-01-01T00:00:00.00')) == 1
+        ? DateTime.parse(salesFilters[1]).add(const Duration(days: 1))
+        : sales.last.date.add(const Duration(days: 1))
+      )) {
         finalSales.add(sales[iteration]);
       }
     }
@@ -60,7 +80,7 @@ class CSVSalesDatasource extends SalesDatasource {
   }
 
   @override
-  Future<List<Sale>> getTopSellingProducts() async {
+  Future<List<Sale>> getTopSellingProducts(List<dynamic> salesFilters) async {
     final rawData = await rootBundle.loadString(csvPath);
     List<Sale> sales = _getSales(rawData);
     
@@ -68,7 +88,7 @@ class CSVSalesDatasource extends SalesDatasource {
   }
 
   @override
-  Future<List<Sale>> getTopBuyingCustomers() async {
+  Future<List<Sale>> getTopBuyingCustomers(List<dynamic> salesFilters) async {
     final rawData = await rootBundle.loadString(csvPath);
     List<Sale> sales = _getSales(rawData);
     List<Sale> finalSales = [];
