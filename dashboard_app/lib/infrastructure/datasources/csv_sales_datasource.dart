@@ -7,6 +7,15 @@ import 'package:flutter/services.dart';
 
 class CSVSalesDatasource extends SalesDatasource {
   final String csvPath = 'data/sales/retail_sales_dataset.csv';
+  final Sale emptySale = Sale(
+    transactionID: 0,
+    date: DateTime.now(),
+    customer: '',
+    productCategory: '',
+    quantity: 0,
+    unitaryPrice: 0,
+    total: 0
+  );
 
   @override
   Future<List<Sale>> getDailySales(List<dynamic> salesFilters) async {
@@ -18,7 +27,7 @@ class CSVSalesDatasource extends SalesDatasource {
 
     for (int iteration = 0; iteration < sales.length; iteration++) {
       if ((sales[iteration].date).isAfter(
-        DateTime.parse(salesFilters[0]).compareTo(DateTime.parse('1900-01-01T00:00:00.00')) == 1
+        salesFilters.isNotEmpty
         ? DateTime.parse(salesFilters[0])
         : sales.last.date.subtract(const Duration(days: 1)))
       ) {
@@ -26,7 +35,7 @@ class CSVSalesDatasource extends SalesDatasource {
       }
     }
     
-    return finalSales;
+    return finalSales.isNotEmpty ? finalSales : [emptySale];
   }
   
   @override
@@ -39,19 +48,19 @@ class CSVSalesDatasource extends SalesDatasource {
     
     for (int iteration = 0; iteration < sales.length; iteration++) {
       if ((sales[iteration].date).isAfter(
-        DateTime.parse(salesFilters[0]).compareTo(DateTime.parse('1900-01-01T00:00:00.00')) == 1
-        ? DateTime.parse(salesFilters[0])
+        salesFilters.isNotEmpty
+        ? DateTime.parse(salesFilters[0]).subtract(const Duration(days: 1))
         : sales.last.date.subtract(const Duration(days: 7))
       ) && sales[iteration].date.isBefore(
-        DateTime.parse(salesFilters[0]).compareTo(DateTime.parse('1900-01-01T00:00:00.00')) == 1
-        ? DateTime.parse(salesFilters[1]).add(const Duration(days: 1))
+        salesFilters.isNotEmpty
+        ? DateTime.parse(salesFilters[0]).add(const Duration(days: 7))
         : sales.last.date.add(const Duration(days: 1))
       )) {
         finalSales.add(sales[iteration]);
       }
     }
     
-    return finalSales;
+    return finalSales.isNotEmpty ? finalSales : [emptySale];
   }
 
   @override
@@ -64,19 +73,19 @@ class CSVSalesDatasource extends SalesDatasource {
 
     for (int iteration = 0; iteration < sales.length; iteration++) {
       if ((sales[iteration].date).isAfter(
-        DateTime.parse(salesFilters[0]).compareTo(DateTime.parse('1900-01-01T00:00:00.00')) == 1
-        ? DateTime.parse(salesFilters[0])
+        salesFilters.isNotEmpty
+        ? DateTime.parse(salesFilters[0]).subtract(const Duration(days: 1))
         : sales.last.date.subtract(const Duration(days: 28)))
       && sales[iteration].date.isBefore(
-        DateTime.parse(salesFilters[0]).compareTo(DateTime.parse('1900-01-01T00:00:00.00')) == 1
+        salesFilters.isNotEmpty
         ? DateTime.parse(salesFilters[1]).add(const Duration(days: 1))
-        : sales.last.date.add(const Duration(days: 1))
+        : sales.last.date.add(const Duration(days: 28))
       )) {
         finalSales.add(sales[iteration]);
       }
     }
     
-    return finalSales;
+    return finalSales.isNotEmpty ? finalSales : [emptySale];
   }
 
   @override

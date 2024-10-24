@@ -3,7 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:dashboard_app/domain/entities/sale.dart';
 import 'package:dashboard_app/presentation/widgets/charts/custom_charts.dart';
 
-List<int> productsQuantities = [];
+List<int> _productsQuantities = [];
 
 class TopSellingProductsChart extends CustomRadarChart {
   final List<Sale> topSellingProductsData;
@@ -15,7 +15,7 @@ class TopSellingProductsChart extends CustomRadarChart {
 
   @override
   Widget build(BuildContext context) {
-    productsQuantities = _getProductsQuantities();
+    _productsQuantities = _getProductsQuantities();
 
     return RadarChart(
       RadarChartData(
@@ -76,9 +76,9 @@ class TopSellingProductsChart extends CustomRadarChart {
         title: 'Total',
         color: color,
         values: [
-          productsQuantities[0].toDouble(),
-          productsQuantities[1].toDouble(),
-          productsQuantities[2].toDouble(),
+          _productsQuantities[0].toDouble(),
+          _productsQuantities[1].toDouble(),
+          _productsQuantities[2].toDouble(),
         ],
       )
     ];

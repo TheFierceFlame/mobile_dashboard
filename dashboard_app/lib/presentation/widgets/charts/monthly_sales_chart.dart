@@ -5,20 +5,24 @@ import 'package:dashboard_app/presentation/widgets/charts/custom_charts.dart';
 import 'package:intl/intl.dart';
 
 List<double> weeklyTotals = [];
-double maxTotal = 0;
+double _maxTotal = 0;
 
 class MonthlySalesChart extends CustomLineChart {
   final List<Sale> monthlySalesData;
+  final List<String> monthlySalesDate;
 
   const MonthlySalesChart({
     super.key,
-    required this.monthlySalesData
+    required this.monthlySalesData,
+    required this.monthlySalesDate
   });
 
   @override
   Widget build(BuildContext context) {
+    if(monthlySalesData[0].customer == '') return const Center(child: Text('Sin datos', style: TextStyle(color: Colors.black87)));
+
     weeklyTotals = _getWeeklyTotals();
-    maxTotal = _getMaxTotal();
+    _maxTotal = _getMaxTotal();
 
     return LineChart(
       LineChartData(
@@ -27,7 +31,7 @@ class MonthlySalesChart extends CustomLineChart {
           rightTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              interval: maxTotal,
+              interval: _maxTotal,
               reservedSize: 30,
               getTitlesWidget: super.emptyTitleWidgets
             ),
@@ -51,7 +55,7 @@ class MonthlySalesChart extends CustomLineChart {
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              interval: maxTotal / 10,
+              interval: _maxTotal / 10,
               reservedSize: 50,
               getTitlesWidget: _leftTitleWidgets
             ),
@@ -87,7 +91,15 @@ class MonthlySalesChart extends CustomLineChart {
     return SideTitleWidget(
       axisSide: meta.axisSide,
       child: Text(
-        value == 1.5 ? 'Del ${DateFormat('dd/MM/yyyy').format(monthlySalesData.last.date.subtract(const Duration(days: 27)))} al ${DateFormat('dd/MM/yyyy').format(monthlySalesData.last.date)}' : '',
+        value == 1.5 ? 'Del ${
+          monthlySalesDate.isEmpty
+          ? DateFormat('dd/MM/yyyy').format(monthlySalesData.first.date)
+          : DateFormat('dd/MM/yyyy').format(DateTime.parse(monthlySalesDate[0]))
+        } al ${
+          monthlySalesDate.isEmpty
+          ? DateFormat('dd/MM/yyyy').format(monthlySalesData.first.date)
+          : DateFormat('dd/MM/yyyy').format(DateTime.parse(monthlySalesDate[0]).add(const Duration(days: 27)))
+        }' : '',
         textAlign: TextAlign.left,
         style: TextStyle(
           color: mainTitleColor,
@@ -100,8 +112,8 @@ class MonthlySalesChart extends CustomLineChart {
   Widget _leftTitleWidgets(double value, TitleMeta meta) {
     String text = '';
     
-    if (value == 0 || value % (maxTotal / 10) == 0) {
-      text = '\$$value';
+    if (value == 0 || value % (_maxTotal / 10) == 0) {
+      text = '\$${value.roundToDouble()}';
     }
 
     return SideTitleWidget(

@@ -3,15 +3,15 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:dashboard_app/domain/entities/sale.dart';
 import 'package:dashboard_app/presentation/widgets/charts/custom_charts.dart';
 
-List<Color> sectionsColors = [
+List<Color> _sectionsColors = [
   Colors.blue,
   Colors.green,
   Colors.red,
   Colors.yellow,
   Colors.purple
 ];
-List<String> customers = [];
-List<double> totalAmounts = [];
+List<String> _customers = [];
+List<double> _totalAmounts = [];
 
 class TopBuyingCustomersChart extends CustomPieChart {
   final List<Sale> topBuyingCustomersData;
@@ -23,8 +23,8 @@ class TopBuyingCustomersChart extends CustomPieChart {
 
   @override
   Widget build(BuildContext context) {
-    customers = _getCustomers();
-    totalAmounts = _getTotalAmounts();
+    _customers = _getCustomers();
+    _totalAmounts = _getTotalAmounts();
 
     return Row(
       children: [
@@ -48,28 +48,28 @@ class TopBuyingCustomersChart extends CustomPieChart {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
               Indicator(
-                color: sectionsColors[0],
-                text: customers[0],
+                color: _sectionsColors[0],
+                text: _customers[0],
               ),
               const SizedBox(height: 4),
               Indicator(
-                color: sectionsColors[1],
-                text: customers[1],
+                color: _sectionsColors[1],
+                text: _customers[1],
               ),
               const SizedBox(height: 4),
               Indicator(
-                color: sectionsColors[2],
-                text: customers[2],
+                color: _sectionsColors[2],
+                text: _customers[2],
               ),
               const SizedBox(height: 4),
               Indicator(
-                color: sectionsColors[3],
-                text: customers[3],
+                color: _sectionsColors[3],
+                text: _customers[3],
               ),
               const SizedBox(height: 4),
               Indicator(
-                color: sectionsColors[4],
-                text: customers[4],
+                color: _sectionsColors[4],
+                text: _customers[4],
               ),
             ],
         )
@@ -82,10 +82,10 @@ class TopBuyingCustomersChart extends CustomPieChart {
       const fontSize = 16.0;
       const radius = 100.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
-      double value = (totalAmounts[index + 1] / totalAmounts[0]) * 100;
+      double value = (_totalAmounts[index + 1] / _totalAmounts[0]) * 100;
 
       return PieChartSectionData(
-        color: sectionsColors[index],
+        color: _sectionsColors[index],
         value: value,
         title: '${value.round()}%',
         radius: radius,
@@ -116,7 +116,7 @@ class TopBuyingCustomersChart extends CustomPieChart {
 
     for(var sale in topBuyingCustomersData) {
       totalAmounts[0] += sale.total;
-      totalAmounts[customers.indexOf(sale.customer) + 1] += sale.total;
+      totalAmounts[_customers.indexOf(sale.customer) + 1] += sale.total;
     }
 
     return totalAmounts;

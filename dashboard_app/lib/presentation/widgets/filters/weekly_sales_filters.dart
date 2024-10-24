@@ -5,23 +5,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 TextEditingController _dateController = TextEditingController();
 
-class DailySalesFilters extends ConsumerStatefulWidget {
-  const DailySalesFilters({super.key});
+class WeeklySalesFilters extends ConsumerStatefulWidget {
+  const WeeklySalesFilters({super.key});
 
   @override
-  DailySalesFiltersState createState() => DailySalesFiltersState();
+  WeeklySalesFiltersState createState() => WeeklySalesFiltersState();
 }
 
-class DailySalesFiltersState extends ConsumerState<DailySalesFilters> {
+class WeeklySalesFiltersState extends ConsumerState<WeeklySalesFilters> {
   @override
   void initState() {
     super.initState();
-    ref.read(dailySalesFiltersProvider.notifier);
+    ref.read(weeklySalesFiltersProvider.notifier);
   }
 
   @override
   Widget build(BuildContext context) {
-    String currentDate = ref.watch(dailySalesFiltersProvider).isNotEmpty ? ref.watch(dailySalesFiltersProvider)[0].toString() : _dateController.text;
+    String currentDate = ref.watch(weeklySalesFiltersProvider).isNotEmpty ? ref.watch(weeklySalesFiltersProvider)[0].toString() : _dateController.text;
     
     _dateController.text = currentDate;
 
@@ -40,8 +40,11 @@ class DailySalesFiltersState extends ConsumerState<DailySalesFilters> {
                   MaterialButton(
                     child: const Text("Aceptar"),
                     onPressed: () {
-                      ref.read(dailySalesFiltersProvider.notifier).state = [_dateController.text.toString().split(" ")[0]];
-                      ref.read(dailySalesProvider.notifier).loadData(ref.read(dailySalesFiltersProvider));
+                      ref.read(weeklySalesFiltersProvider.notifier).state = [
+                        _dateController.text.toString().split(" ")[0],
+                        DateTime.parse(_dateController.text.toString().split(" ")[0]).add(const Duration(days: 6)).toString()
+                      ];
+                      ref.read(weeklySalesProvider.notifier).loadData(ref.read(weeklySalesFiltersProvider));
                       Navigator.pop(context);
                     },
                   ),

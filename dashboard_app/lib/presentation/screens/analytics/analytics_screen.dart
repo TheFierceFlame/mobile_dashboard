@@ -1,11 +1,7 @@
 import 'package:dashboard_app/presentation/providers/analytics/filters_provider.dart';
-import 'package:dashboard_app/presentation/widgets/charts/top_buying_customers_chart.dart';
-import 'package:dashboard_app/presentation/widgets/charts/top_selling_products_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:dashboard_app/presentation/widgets/charts/monthly_sales_chart.dart';
-import 'package:dashboard_app/presentation/widgets/charts/weekly_sales_chart.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
 import 'package:dashboard_app/presentation/widgets/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -41,10 +37,9 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     final monthlySales = ref.watch(monthlySalesProvider);
     final topSellingProducts = ref.watch(topSellingProductsProvider);
     final topBuyingCustomers = ref.watch(topBuyingCustomersProvider);
-    DailySalesChart ventasDiariasChart = DailySalesChart(dailySalesData: dailySales);
-
-    WeeklySalesChart ventasSemanalesChart = WeeklySalesChart(weeklySalesData: weeklySales);
-    MonthlySalesChart ventasMensualesChart = MonthlySalesChart(monthlySalesData: monthlySales);
+    DailySalesChart ventasDiariasChart = DailySalesChart(dailySalesData: dailySales, dailySalesDate: ref.read(dailySalesFiltersProvider));
+    WeeklySalesChart ventasSemanalesChart = WeeklySalesChart(weeklySalesData: weeklySales, weeklySalesDate: ref.read(weeklySalesFiltersProvider));
+    MonthlySalesChart ventasMensualesChart = MonthlySalesChart(monthlySalesData: monthlySales, monthlySalesDate: ref.read(monthlySalesFiltersProvider));
     TopSellingProductsChart topProductosVentas = TopSellingProductsChart(topSellingProductsData: topSellingProducts);
     TopBuyingCustomersChart topClientesCompras = TopBuyingCustomersChart(topBuyingCustomersData: topBuyingCustomers);
     
@@ -104,27 +99,27 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                     ChartCard(
                       chartTitle: 'Ventas diarias',
                       chartType: ventasDiariasChart,
-                      chartFilters: const CustomFilters()
+                      chartFilters: const DailySalesFilters()
                     ),
                     ChartCard(
                       chartTitle: 'Ventas semanales',
                       chartType: ventasSemanalesChart,
-                      chartFilters: const CustomFilters(),
+                      chartFilters: const WeeklySalesFilters(),
                     ),
                     ChartCard(
                       chartTitle: 'Ventas mensuales',
                       chartType: ventasMensualesChart,
-                      chartFilters: const CustomFilters(),
+                      chartFilters: const MonthlySalesFilters(),
                     ),
                     ChartCard(
                       chartTitle: 'Productos más vendidos',
                       chartType: topProductosVentas,
-                      chartFilters: const CustomFilters(),
+                      chartFilters: const DailySalesFilters(),
                     ),
                     ChartCard(
                       chartTitle: 'Clientes que más compran',
                       chartType: topClientesCompras,
-                      chartFilters: const CustomFilters(),
+                      chartFilters: const DailySalesFilters(),
                     )
                   ],
                 ),
@@ -158,7 +153,7 @@ class ChartCard extends StatelessWidget {
         padding: const EdgeInsets.all(5.0),
         child: Slidable(
           endActionPane: ActionPane(
-            extentRatio: 0.5,
+            extentRatio: 0.92,
             motion: const DrawerMotion(),
             children: [
               SlidableAction(

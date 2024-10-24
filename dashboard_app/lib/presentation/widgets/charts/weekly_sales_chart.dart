@@ -4,21 +4,25 @@ import 'package:dashboard_app/domain/entities/sale.dart';
 import 'package:dashboard_app/presentation/widgets/charts/custom_charts.dart';
 import 'package:intl/intl.dart';
 
-List<double> dailyTotals = [];
-double maxTotal = 0;
+List<double> _dailyTotals = [];
+double _maxTotal = 0;
 
 class WeeklySalesChart extends CustomLineChart {
   final List<Sale> weeklySalesData;
+  final List<String> weeklySalesDate;
 
   const WeeklySalesChart({
     super.key,
-    required this.weeklySalesData
+    required this.weeklySalesData,
+    required this.weeklySalesDate
   });
 
   @override
   Widget build(BuildContext context) {
-    dailyTotals = _getDailyTotals();
-    maxTotal = _getMaxTotal();
+    if(weeklySalesData[0].customer == '') return const Center(child: Text('Sin datos', style: TextStyle(color: Colors.black87)));
+
+    _dailyTotals = _getDailyTotals();
+    _maxTotal = _getMaxTotal();
 
     return LineChart(
       LineChartData(
@@ -27,7 +31,7 @@ class WeeklySalesChart extends CustomLineChart {
           rightTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              interval: maxTotal,
+              interval: _maxTotal,
               reservedSize: 30,
               getTitlesWidget: super.emptyTitleWidgets
             ),
@@ -51,7 +55,7 @@ class WeeklySalesChart extends CustomLineChart {
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              interval: maxTotal / 10,
+              interval: _maxTotal / 10,
               reservedSize: 50,
               getTitlesWidget: _leftTitleWidgets
             ),
@@ -63,13 +67,13 @@ class WeeklySalesChart extends CustomLineChart {
         minY: 0,
         lineBarsData: [LineChartBarData(
           spots: [
-            FlSpot(0, dailyTotals[0]),
-            FlSpot(1, dailyTotals[1]),
-            FlSpot(2, dailyTotals[2]),
-            FlSpot(3, dailyTotals[3]),
-            FlSpot(4, dailyTotals[4]),
-            FlSpot(5, dailyTotals[5]),
-            FlSpot(6, dailyTotals[6]),
+            FlSpot(0, _dailyTotals[0]),
+            FlSpot(1, _dailyTotals[1]),
+            FlSpot(2, _dailyTotals[2]),
+            FlSpot(3, _dailyTotals[3]),
+            FlSpot(4, _dailyTotals[4]),
+            FlSpot(5, _dailyTotals[5]),
+            FlSpot(6, _dailyTotals[6]),
           ],
           color: Colors.indigo[900],
           isCurved: false,
@@ -90,7 +94,15 @@ class WeeklySalesChart extends CustomLineChart {
     return SideTitleWidget(
       axisSide: meta.axisSide,
       child: Text(
-        value == 3 ? 'Del ${DateFormat('dd/MM/yyyy').format(weeklySalesData.last.date.subtract(const Duration(days: 6)))} al ${DateFormat('dd/MM/yyyy').format(weeklySalesData.last.date)}' : '',
+        value == 3 ? 'Del ${
+          weeklySalesDate.isEmpty
+          ? DateFormat('dd/MM/yyyy').format(weeklySalesData.first.date)
+          : DateFormat('dd/MM/yyyy').format(DateTime.parse(weeklySalesDate[0]))
+        } al ${
+          weeklySalesDate.isEmpty
+          ? DateFormat('dd/MM/yyyy').format(weeklySalesData.first.date)
+          : DateFormat('dd/MM/yyyy').format(DateTime.parse(weeklySalesDate[0]).add(const Duration(days: 6)))
+        }' : '',
         textAlign: TextAlign.left,
         style: TextStyle(
           color: mainTitleColor,
@@ -103,8 +115,8 @@ class WeeklySalesChart extends CustomLineChart {
   Widget _leftTitleWidgets(double value, TitleMeta meta) {
     String text = '';
     
-    if (value == 0 || value % (maxTotal / 10) == 0) {
-      text = '\$$value';
+    if (value == 0 || value % (_maxTotal / 10) == 0) {
+      text = '\$${value.roundToDouble()}';
     }
 
     return SideTitleWidget(
@@ -120,14 +132,43 @@ class WeeklySalesChart extends CustomLineChart {
   }
 
   Widget _bottomTitleWidgets(double value, TitleMeta meta) {
+    String text;
+
+    switch(value) {
+      case 0:
+        text = 'Día 1';
+        break;
+      case 1:
+        text = 'Día 2';
+        break;
+      case 2:
+        text = 'Día 3';
+        break;
+      case 3:
+        text = 'Día 4';
+        break;
+      case 4:
+        text = 'Día 5';
+        break;
+      case 5:
+        text = 'Día 6';
+        break;
+      case 6:
+        text = 'Día 7';
+        break;
+      default:
+        text = '';
+    }
+
     return SideTitleWidget(
       axisSide: meta.axisSide,
       child: Text(
-        value.toString(),
+        text,
         textAlign: TextAlign.left,
         style: TextStyle(
           color: mainTitleColor,
-          fontSize: 16
+          fontSize: 12,
+          fontWeight: FontWeight.bold
         )
       ),
     );
@@ -182,8 +223,8 @@ class WeeklySalesChart extends CustomLineChart {
   double _getMaxTotal() {
     double maxValue = 0;
     
-    for (int iteration = 0; iteration < dailyTotals.length; iteration++) {
-      if (dailyTotals[iteration] > maxValue) maxValue = dailyTotals[iteration];
+    for (int iteration = 0; iteration < _dailyTotals.length; iteration++) {
+      if (_dailyTotals[iteration] > maxValue) maxValue = _dailyTotals[iteration];
     }
 
     return maxValue;

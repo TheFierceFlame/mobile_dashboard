@@ -5,23 +5,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 TextEditingController _dateController = TextEditingController();
 
-class DailySalesFilters extends ConsumerStatefulWidget {
-  const DailySalesFilters({super.key});
+class MonthlySalesFilters extends ConsumerStatefulWidget {
+  const MonthlySalesFilters({super.key});
 
   @override
-  DailySalesFiltersState createState() => DailySalesFiltersState();
+  MonthlySalesFiltersState createState() => MonthlySalesFiltersState();
 }
 
-class DailySalesFiltersState extends ConsumerState<DailySalesFilters> {
+class MonthlySalesFiltersState extends ConsumerState<MonthlySalesFilters> {
   @override
   void initState() {
     super.initState();
-    ref.read(dailySalesFiltersProvider.notifier);
+    ref.read(monthlySalesFiltersProvider.notifier);
   }
 
   @override
   Widget build(BuildContext context) {
-    String currentDate = ref.watch(dailySalesFiltersProvider).isNotEmpty ? ref.watch(dailySalesFiltersProvider)[0].toString() : _dateController.text;
+    String currentDate = ref.watch(monthlySalesFiltersProvider).isNotEmpty ? ref.watch(monthlySalesFiltersProvider)[0].toString() : _dateController.text;
     
     _dateController.text = currentDate;
 
@@ -40,8 +40,11 @@ class DailySalesFiltersState extends ConsumerState<DailySalesFilters> {
                   MaterialButton(
                     child: const Text("Aceptar"),
                     onPressed: () {
-                      ref.read(dailySalesFiltersProvider.notifier).state = [_dateController.text.toString().split(" ")[0]];
-                      ref.read(dailySalesProvider.notifier).loadData(ref.read(dailySalesFiltersProvider));
+                      ref.read(monthlySalesFiltersProvider.notifier).state = [
+                        _dateController.text.toString().split(" ")[0],
+                        DateTime.parse(_dateController.text.toString().split(" ")[0]).add(const Duration(days: 27)).toString()
+                      ];
+                      ref.read(monthlySalesProvider.notifier).loadData(ref.read(monthlySalesFiltersProvider));
                       Navigator.pop(context);
                     },
                   ),
