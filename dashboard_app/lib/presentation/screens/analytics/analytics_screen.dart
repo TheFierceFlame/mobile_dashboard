@@ -1,4 +1,4 @@
-import 'package:dashboard_app/presentation/providers/analytics/filters_provider.dart';
+import 'package:dashboard_app/presentation/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:animate_do/animate_do.dart';
@@ -65,18 +65,23 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             children: <Widget> [
               Padding(
                 padding: const EdgeInsets.all(5.0),
-                child: Container(
-                  width: 400,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(Colors.white)
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) {
+                              return const ProductsAnalyticsScreen();
+                            })
+                          );
+                        }, 
+                        child: const Text(
                           'Sucursal A de la Empresa X',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -84,13 +89,9 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                             fontSize: 18
                           ),
                         ),
-                        Icon(
-                          Icons.arrow_drop_down, 
-                          color: Colors.black87
-                        )
-                      ],
-                    ),
-                  )
+                      ),
+                    )
+                  ],
                 ),
               ),
               Expanded(
