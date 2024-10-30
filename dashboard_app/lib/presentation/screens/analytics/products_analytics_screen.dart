@@ -1,6 +1,8 @@
+import 'package:dashboard_app/domain/entities/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
 import 'package:dashboard_app/presentation/widgets/widgets.dart';
 
@@ -13,6 +15,9 @@ class ProductsAnalyticsScreen extends ConsumerStatefulWidget {
 
 class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen> {
   bool loading = true;
+  SlidingUpPanelController panelController = SlidingUpPanelController();
+  List<String> _productsNames = [];
+  List<double> _productsPrices = [];
 
   @override
   void initState() {
@@ -29,101 +34,134 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
     final productsSales = ref.watch(productsSalesProvider);
     ProductsReportChart topProductosVentas = ProductsReportChart(productsSalesData: productsSales);
 
-    return Scaffold(
-      backgroundColor: Colors.black12,
-      appBar: AppBar(
-        backgroundColor: Colors.orange[900],
-        centerTitle: true,
-        title: const Text(
-          'Reporte de venta por línea',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 18
-          ),
-        ),
-        leading: FloatingActionButton(
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.orange[900],
-          elevation: 0,
-          focusElevation: 0,
-          hoverElevation: 0,
-          highlightElevation: 0,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Icon(Icons.arrow_back_ios_new_rounded),
-        ),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16)
+    _productsNames = [];
+    _productsPrices = [];
+    _getProductsData(productsSales);
+
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: Colors.black12,
+          appBar: AppBar(
+            backgroundColor: Colors.orange[900],
+            centerTitle: true,
+            title: const Text(
+              'Reporte de venta por línea',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 18
+              ),
             ),
+            leading: FloatingActionButton(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.orange[900],
+              elevation: 0,
+              focusElevation: 0,
+              hoverElevation: 0,
+              highlightElevation: 0,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Icon(Icons.arrow_back_ios_new_rounded),
+            ),
+          ),
+          body: Center(
             child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                children: [
-                  const Text('Productos vendidos', style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 18
-                  )),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      height: 600,
-                      width: 380,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16)
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: [
+                      const Text('Productos vendidos', style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 18
+                      )),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          height: 600,
+                          width: 380,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16)
+                          ),
+                          child: FadeIn(
+                            duration: const Duration(milliseconds: 500),
+                            child: topProductosVentas
+                          )
+                        ),
                       ),
-                      child: FadeIn(
-                        duration: const Duration(milliseconds: 500),
-                        child: topProductosVentas
-                      )
-                    ),
+                      const Spacer(),
+                      CustomButton(panelController: panelController),
+                    ],
                   ),
-                  const Spacer(),
-                  const CustomButton()
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
-      floatingActionButton: Container(
-        margin: const EdgeInsets.only(bottom: 60),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            FloatingActionButton(
-              heroTag: "FloatingActionButtonPopulate",
-              backgroundColor: Colors.indigo[900],
-              onPressed: () {
-        
-              },
-              child: const Icon(Icons.add_box_rounded),
+          floatingActionButton: Container(
+            margin: const EdgeInsets.only(bottom: 60),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  heroTag: "FloatingActionButtonPopulate",
+                  backgroundColor: Colors.indigo[900],
+                  onPressed: () {
+            
+                  },
+                  child: const Icon(Icons.add_box_rounded),
+                ),
+                const SizedBox(height: 10),
+                FloatingActionButton(
+                  heroTag: "FloatingActionButtonErase",
+                  backgroundColor: Colors.indigo[900],
+                  onPressed: () {
+            
+                  },
+                  child: const Icon(Icons.remove_circle_outlined),
+                )
+              ],
             ),
-            const SizedBox(height: 10),
-            FloatingActionButton(
-              heroTag: "FloatingActionButtonErase",
-              backgroundColor: Colors.indigo[900],
-              onPressed: () {
-        
-              },
-              child: const Icon(Icons.remove_circle_outlined),
-            )
-          ],
+          ),
         ),
-      ),
+         _CustomSlidingUpPanel(
+          panelController: panelController,
+          productsNames: _productsNames,
+          productsPrices: _productsPrices,
+        )
+      ]
     );
+  }
+
+  _getProductsData(List<Product> productsSales) {
+    List<Map<String, dynamic>> productsData = [{'Sin seleccionar' : 0}];
+
+    for(var product in productsSales) {
+      if(!productsData.any((element) => element.keys.toList()[0] == product.name)) {
+        productsData.add({product.name : product.unitaryPrice});
+      }
+    }
+
+    for(var element in productsData) {
+      _productsNames.add(element.keys.toList()[0]);
+      _productsPrices.add(element.values.toList()[0]);
+    }
   }
 }
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key});
+  final SlidingUpPanelController panelController;
+
+  const CustomButton({
+    super.key,
+    required this.panelController
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +173,7 @@ class CustomButton extends StatelessWidget {
           color: Colors.indigo[900],
           child: InkWell(
             onTap: () {
-                      
+              panelController.anchor();
             },
             child: const Padding(
               padding: EdgeInsets.all(8.0),
@@ -152,5 +190,181 @@ class CustomButton extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _CustomSlidingUpPanel extends StatefulWidget {
+  final SlidingUpPanelController panelController;
+  final List<String> productsNames;
+  final List<double> productsPrices;
+
+  const _CustomSlidingUpPanel({
+    required this.panelController,
+    required this.productsNames,
+    required this.productsPrices
+  });
+
+  @override
+  State<_CustomSlidingUpPanel> createState() => _CustomSlidingUpPanelState();
+}
+
+class _CustomSlidingUpPanelState extends State<_CustomSlidingUpPanel> {
+  String dropdownValue = 'Sin seleccionar';
+  int productQuantity = 1;
+  double productTotal = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return SlidingUpPanelWidget(
+      controlHeight: 0,
+      anchor: 0.58,
+      minimumBound: 0.42,
+      upperBound: 1.72,
+      panelController: widget.panelController,
+      enableOnTap: false,
+      dragDown: (status) {
+        setState(() {
+          dropdownValue = 'Sin seleccionar';
+          productQuantity = 1;
+          productTotal = 0;
+        });
+      },
+      child: Container(
+        decoration: const ShapeDecoration(
+          color: Colors.white,
+          shadows: [
+            BoxShadow(
+              blurRadius: 5.0,
+              spreadRadius: 2.0,
+              color: Colors.black12
+            )
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16.0),
+              topRight: Radius.circular(16.0),
+            ),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 35, right: 35),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 30),
+              const Text(
+                'Producto',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 16
+                ),
+              ),
+              DropdownButton(
+                isExpanded: true,
+                style: TextStyle(
+                  color: Colors.orange[900],
+                  fontSize: 16
+                ),
+                iconEnabledColor: Colors.black87,
+                value: dropdownValue,
+                icon: const Icon(Icons.keyboard_arrow_down),  
+                items: widget.productsNames.map((String product) {
+                  return DropdownMenuItem(
+                    value: product,
+                    child: Text(product)
+                  );
+                }).toList(),
+                onChanged: (String? newValue) { 
+                  _updateValues(newValue!);
+                },
+              ),
+              const SizedBox(height: 30),
+              const Text(
+                'Cantidad',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 16
+                ),
+              ),
+              Text(
+                '$productQuantity',
+                style: TextStyle(
+                  color: Colors.orange[900],
+                  fontSize: 16
+                ),
+              ),
+              const SizedBox(height: 30),
+              const Text(
+                'Total calculado',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 16
+                ),
+              ),
+              Text(
+                '\$$productTotal',
+                style: TextStyle(
+                  color: Colors.orange[900],
+                  fontSize: 16
+                ),
+              ),
+              const SizedBox(height: 176),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 150,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.indigo[900]),
+                      ),
+                      onPressed: () {
+                        widget.panelController.collapse();
+                      },
+                      child: const Text(
+                        'Registrar',
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                      )
+                    ),
+                  ),
+                  const Spacer(),
+                  SizedBox(
+                    width: 150,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: const WidgetStatePropertyAll(Colors.white),
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24.0),
+                            side: BorderSide(color: Colors.indigo[900]!)
+                          )
+                        )
+                      ),
+                      onPressed: () {
+                        widget.panelController.collapse();
+                      },
+                      child: Text(
+                        'Cancelar',
+                        style: TextStyle(
+                          color: Colors.indigo[900]
+                        ),
+                      )
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _updateValues(product) {
+    setState(() {
+      dropdownValue = product;
+      productTotal = widget.productsPrices[widget.productsNames.indexOf(product)] * productQuantity;
+    });
   }
 }
