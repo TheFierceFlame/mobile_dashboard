@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dashboard_app/presentation/providers/analytics/sales/sales_provider.dart';
+import 'package:dashboard_app/presentation/providers/providers.dart';
 
 final initialLoadingProvider = Provider<bool>((ref) {
   final step1 = ref.watch(dailySalesProvider).isEmpty;

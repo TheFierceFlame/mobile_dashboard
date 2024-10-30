@@ -2,43 +2,43 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dashboard_app/domain/entities/sale.dart';
 import 'package:dashboard_app/presentation/providers/analytics/sales/sales_repository_provider.dart';
 
-final dailySalesProvider = StateNotifierProvider<SalesNotifier, List<Sale>>((ref) {
+final dailySalesProvider = StateNotifierProvider<_SalesNotifier, List<Sale>>((ref) {
   final fetchSales = ref.watch(salesRepositoryProvider).getDailySales;
 
-  return SalesNotifier(fetchSales: fetchSales);
+  return _SalesNotifier(fetchSales: fetchSales);
 });
 
-final weeklySalesProvider = StateNotifierProvider<SalesNotifier, List<Sale>>((ref) {
+final weeklySalesProvider = StateNotifierProvider<_SalesNotifier, List<Sale>>((ref) {
   final fetchSales = ref.watch(salesRepositoryProvider).getWeeklySales;
 
-  return SalesNotifier(fetchSales: fetchSales);
+  return _SalesNotifier(fetchSales: fetchSales);
 });
 
-final monthlySalesProvider = StateNotifierProvider<SalesNotifier, List<Sale>>((ref) {
+final monthlySalesProvider = StateNotifierProvider<_SalesNotifier, List<Sale>>((ref) {
   final fetchSales = ref.watch(salesRepositoryProvider).getMonthlySales;
 
-  return SalesNotifier(fetchSales: fetchSales);
+  return _SalesNotifier(fetchSales: fetchSales);
 });
 
-final topSellingProductsProvider = StateNotifierProvider<SalesNotifier, List<Sale>>((ref) {
+final topSellingProductsProvider = StateNotifierProvider<_SalesNotifier, List<Sale>>((ref) {
   final fetchSales = ref.watch(salesRepositoryProvider).getTopSellingProducts;
 
-  return SalesNotifier(fetchSales: fetchSales);
+  return _SalesNotifier(fetchSales: fetchSales);
 });
 
-final topBuyingCustomersProvider = StateNotifierProvider<SalesNotifier, List<Sale>>((ref) {
+final topBuyingCustomersProvider = StateNotifierProvider<_SalesNotifier, List<Sale>>((ref) {
   final fetchSales = ref.watch(salesRepositoryProvider).getTopBuyingCustomers;
 
-  return SalesNotifier(fetchSales: fetchSales);
+  return _SalesNotifier(fetchSales: fetchSales);
 });
 
-typedef SalesCallback = Future<List<Sale>> Function(List<dynamic>);
+typedef _SalesCallback = Future<List<Sale>> Function(List<dynamic>);
 
-class SalesNotifier extends StateNotifier<List<Sale>> {  
+class _SalesNotifier extends StateNotifier<List<Sale>> {  
   bool isLoading = false;
-  SalesCallback fetchSales;
+  _SalesCallback fetchSales;
 
-  SalesNotifier({
+  _SalesNotifier({
     required this.fetchSales,
   }): super([]);
 

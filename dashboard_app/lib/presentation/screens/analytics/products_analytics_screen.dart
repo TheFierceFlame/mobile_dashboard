@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
 import 'package:dashboard_app/presentation/widgets/widgets.dart';
 
@@ -11,20 +12,22 @@ class ProductsAnalyticsScreen extends ConsumerStatefulWidget {
 }
 
 class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen> {
+  bool loading = true;
+
   @override
   void initState() {
     super.initState();
-    ref.read(dailySalesProvider.notifier).loadData(ref.read(dailySalesFiltersProvider));
-    ref.read(weeklySalesProvider.notifier).loadData(ref.read(weeklySalesFiltersProvider));
-    ref.read(monthlySalesProvider.notifier).loadData(ref.read(monthlySalesFiltersProvider));
-    ref.read(topSellingProductsProvider.notifier).loadData(ref.read(topSellingProductsFiltersProvider));
-    ref.read(topBuyingCustomersProvider.notifier).loadData(ref.read(topBuyingCustomersFiltersProvider));
+    ref.read(productsSalesProvider.notifier).loadData();
   }
 
   @override
   Widget build(BuildContext context) {
-    final topSellingProducts = ref.watch(topSellingProductsProvider);
-    TopSellingProductsChart topProductosVentas = TopSellingProductsChart(topSellingProductsData: topSellingProducts);
+    final initialLoading = ref.watch(productsLoadingProvider);
+
+    if(initialLoading) return const FullScreenLoader();
+
+    final productsSales = ref.watch(productsSalesProvider);
+    ProductsReportChart topProductosVentas = ProductsReportChart(productsSalesData: productsSales);
 
     return Scaffold(
       backgroundColor: Colors.black12,
@@ -64,46 +67,89 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
-                  const Text('Productos vendidos', style: const TextStyle(
-                          color: Colors.black87,
-                          fontSize: 18
-                        )),
-                  const SizedBox(height: 20),
-                  Container(
-                    height: 252,
-                    width: 380,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16)
+                  const Text('Productos vendidos', style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 18
+                  )),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      height: 600,
+                      width: 380,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16)
+                      ),
+                      child: FadeIn(
+                        duration: const Duration(milliseconds: 500),
+                        child: topProductosVentas
+                      )
                     ),
-                    child: topProductosVentas
-                  )
+                  ),
+                  const Spacer(),
+                  const CustomButton()
                 ],
               ),
             ),
           ),
         ),
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            heroTag: "FloatingActionButtonPopulate",
-            backgroundColor: Colors.indigo[900],
-            onPressed: () {
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(bottom: 60),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              heroTag: "FloatingActionButtonPopulate",
+              backgroundColor: Colors.indigo[900],
+              onPressed: () {
+        
+              },
+              child: const Icon(Icons.add_box_rounded),
+            ),
+            const SizedBox(height: 10),
+            FloatingActionButton(
+              heroTag: "FloatingActionButtonErase",
+              backgroundColor: Colors.indigo[900],
+              onPressed: () {
+        
+              },
+              child: const Icon(Icons.remove_circle_outlined),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
 
+class CustomButton extends StatelessWidget {
+  const CustomButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: SizedBox(
+        width: 400,
+        child: Material(
+          color: Colors.indigo[900],
+          child: InkWell(
+            onTap: () {
+                      
             },
-            child: const Icon(Icons.add_box_rounded),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Registrar venta',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                )
+              )
+            )
           ),
-          const SizedBox(height: 10),
-          FloatingActionButton(
-            heroTag: "FloatingActionButtonErase",
-            backgroundColor: Colors.indigo[900],
-            onPressed: () {
-
-            },
-            child: const Icon(Icons.remove_circle_outlined),
-          )
-        ],
+        ),
       ),
     );
   }

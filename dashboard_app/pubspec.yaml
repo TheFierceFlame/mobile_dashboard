@@ -41,6 +41,7 @@ dependencies:
   fl_chart: ^0.69.0
   csv: ^6.0.0
   flutter_slidable: ^3.1.1
+  flutter_sliding_up_panel: ^2.1.1
 
 dev_dependencies:
   flutter_test:

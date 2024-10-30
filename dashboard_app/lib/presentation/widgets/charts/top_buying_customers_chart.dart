@@ -47,27 +47,27 @@ class TopBuyingCustomersChart extends CustomPieChart {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-              Indicator(
+              _Indicator(
                 color: _sectionsColors[0],
                 text: _customers[0],
               ),
               const SizedBox(height: 4),
-              Indicator(
+              _Indicator(
                 color: _sectionsColors[1],
                 text: _customers[1],
               ),
               const SizedBox(height: 4),
-              Indicator(
+              _Indicator(
                 color: _sectionsColors[2],
                 text: _customers[2],
               ),
               const SizedBox(height: 4),
-              Indicator(
+              _Indicator(
                 color: _sectionsColors[3],
                 text: _customers[3],
               ),
               const SizedBox(height: 4),
-              Indicator(
+              _Indicator(
                 color: _sectionsColors[4],
                 text: _customers[4],
               ),
@@ -123,16 +123,14 @@ class TopBuyingCustomersChart extends CustomPieChart {
   }
 }
 
-class Indicator extends StatelessWidget {
+class _Indicator extends StatelessWidget {
   final Color color;
   final String text;
-  final double size;
+  final double size = 12;
 
-  const Indicator({
-    super.key,
+  const _Indicator({
     required this.color,
-    required this.text,
-    this.size = 12,
+    required this.text
   });
 
   @override

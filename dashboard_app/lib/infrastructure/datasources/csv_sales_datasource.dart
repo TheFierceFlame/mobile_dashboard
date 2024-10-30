@@ -113,7 +113,7 @@ class CSVSalesDatasource extends SalesDatasource {
     for (int iteration = 1; iteration < csvData.length; iteration++) {
       var csvSale = CSVSale.fromCSV(csvData[iteration]);
       
-      sales.add(SaleMapper.csvSaletoEntity(csvSale));
+      sales.add(SaleMapper.csvSaleToEntity(csvSale));
     }
 
     return sales;
