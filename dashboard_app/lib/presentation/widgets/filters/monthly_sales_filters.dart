@@ -21,10 +21,6 @@ class MonthlySalesFiltersState extends ConsumerState<MonthlySalesFilters> {
 
   @override
   Widget build(BuildContext context) {
-    String currentDate = ref.watch(monthlySalesFiltersProvider).isNotEmpty ? ref.watch(monthlySalesFiltersProvider)[0].toString() : _dateController.text;
-    
-    _dateController.text = currentDate;
-
     return AlertDialog(
       backgroundColor: Colors.orange[900],
       content: SizedBox(

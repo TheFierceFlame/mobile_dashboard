@@ -33,7 +33,7 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
 
     final productsSales = ref.watch(productsSalesProvider);
     ProductsReportChart topProductosVentas = ProductsReportChart(productsSalesData: productsSales);
-
+    
     _productsNames = [];
     _productsPrices = [];
     _getProductsData(productsSales);
@@ -106,27 +106,13 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
           ),
           floatingActionButton: Container(
             margin: const EdgeInsets.only(bottom: 60),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                FloatingActionButton(
-                  heroTag: "FloatingActionButtonPopulate",
-                  backgroundColor: Colors.indigo[900],
-                  onPressed: () {
-            
-                  },
-                  child: const Icon(Icons.add_box_rounded),
-                ),
-                const SizedBox(height: 10),
-                FloatingActionButton(
-                  heroTag: "FloatingActionButtonErase",
-                  backgroundColor: Colors.indigo[900],
-                  onPressed: () {
-            
-                  },
-                  child: const Icon(Icons.remove_circle_outlined),
-                )
-              ],
+            child: FloatingActionButton(
+              heroTag: "FloatingActionButtonRefresh",
+              backgroundColor: Colors.indigo[900],
+              onPressed: () {
+                        
+              },
+              child: const Icon(Icons.refresh_outlined),
             ),
           ),
         ),
@@ -134,6 +120,7 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
           panelController: panelController,
           productsNames: _productsNames,
           productsPrices: _productsPrices,
+          callback: _addProductSale,
         )
       ]
     );
@@ -152,6 +139,11 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
       _productsNames.add(element.keys.toList()[0]);
       _productsPrices.add(element.values.toList()[0]);
     }
+  }
+
+  _addProductSale(Product product) async {
+    await ref.read(productsSalesProvider.notifier).addSale(product);
+    await ref.read(productsSalesProvider.notifier).loadData();
   }
 }
 
@@ -197,11 +189,13 @@ class _CustomSlidingUpPanel extends StatefulWidget {
   final SlidingUpPanelController panelController;
   final List<String> productsNames;
   final List<double> productsPrices;
+  final Function callback;
 
   const _CustomSlidingUpPanel({
     required this.panelController,
     required this.productsNames,
-    required this.productsPrices
+    required this.productsPrices,
+    required this.callback
   });
 
   @override
@@ -215,6 +209,10 @@ class _CustomSlidingUpPanelState extends State<_CustomSlidingUpPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final quantityController = TextEditingController();
+
+    quantityController.text = productQuantity.toString();
+
     return SlidingUpPanelWidget(
       controlHeight: 0,
       anchor: 0.58,
@@ -222,12 +220,14 @@ class _CustomSlidingUpPanelState extends State<_CustomSlidingUpPanel> {
       upperBound: 1.72,
       panelController: widget.panelController,
       enableOnTap: false,
-      dragDown: (status) {
-        setState(() {
-          dropdownValue = 'Sin seleccionar';
-          productQuantity = 1;
-          productTotal = 0;
-        });
+      onStatusChanged: (status) {
+        if (SlidingUpPanelStatus.collapsed == status) {
+          setState(() {
+            dropdownValue = 'Sin seleccionar';
+            productQuantity = 1;
+            productTotal = 0;
+          });
+        }
       },
       child: Container(
         decoration: const ShapeDecoration(
@@ -286,12 +286,21 @@ class _CustomSlidingUpPanelState extends State<_CustomSlidingUpPanel> {
                   fontSize: 16
                 ),
               ),
-              Text(
-                '$productQuantity',
+              TextField(
+                controller: quantityController,
+                keyboardType: TextInputType.number,
                 style: TextStyle(
                   color: Colors.orange[900],
                   fontSize: 16
                 ),
+                onSubmitted: (value) {
+                  productQuantity = int.parse(quantityController.text);
+                  _updateValues(dropdownValue);
+                },
+                onTapOutside: (event) {
+                  productQuantity = int.parse(quantityController.text);
+                  _updateValues(dropdownValue);
+                },
               ),
               const SizedBox(height: 30),
               const Text(
@@ -318,7 +327,18 @@ class _CustomSlidingUpPanelState extends State<_CustomSlidingUpPanel> {
                         backgroundColor: WidgetStatePropertyAll(Colors.indigo[900]),
                       ),
                       onPressed: () {
-                        widget.panelController.collapse();
+                        if(dropdownValue != 'Sin seleccionar') {
+                          Product product = Product(
+                            id: 1,
+                            name: dropdownValue,
+                            unitaryPrice: widget.productsPrices[widget.productsNames.indexOf(dropdownValue)],
+                            quantity: productQuantity,
+                            total: productTotal
+                          );
+                          
+                          widget.callback(product);
+                          widget.panelController.collapse();
+                        }
                       },
                       child: const Text(
                         'Registrar',
@@ -364,7 +384,7 @@ class _CustomSlidingUpPanelState extends State<_CustomSlidingUpPanel> {
   _updateValues(product) {
     setState(() {
       dropdownValue = product;
-      productTotal = widget.productsPrices[widget.productsNames.indexOf(product)] * productQuantity;
+      productTotal = double.parse((widget.productsPrices[widget.productsNames.indexOf(product)] * productQuantity).toStringAsFixed(2));
     });
   }
 }

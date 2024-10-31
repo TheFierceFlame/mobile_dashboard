@@ -123,7 +123,10 @@ class ProductsReportChart extends CustomPieChart {
     }
 
     _topProducts = topProducts.toSet().toList();
-    _totalAmounts[0] = double.parse(_totalAmounts[0].toStringAsFixed(2));
+    
+    for(int iteration = 0; iteration < _totalAmounts.length; iteration++) {
+      _totalAmounts[iteration] = double.parse(_totalAmounts[iteration].toStringAsFixed(2));
+    }
   }
 }
 
