@@ -20,7 +20,7 @@
     }, {
         "id": 3,
         "category": "Clothing",
-        "product_name": "Chicken",
+        "product_name": "Sweater",
         "unitary_price": 371.88,
         "quantity": 6,
         "total_amount": 2231.28,
@@ -83,7 +83,7 @@
     }, {
         "id": 10,
         "category": "Office",
-        "product_name": "Bread",
+        "product_name": "Paper sheets",
         "unitary_price": 199.77,
         "quantity": 9,
         "total_amount": 1797.93,
@@ -92,7 +92,7 @@
     }, {
         "id": 11,
         "category": "Phones",
-        "product_name": "Tomatoes",
+        "product_name": "Samsung phone",
         "unitary_price": 82.76,
         "quantity": 6,
         "total_amount": 496.56,
@@ -110,7 +110,7 @@
     }, {
         "id": 13,
         "category": "Outdoors",
-        "product_name": "Tuna",
+        "product_name": "Camping tent",
         "unitary_price": 510.55,
         "quantity": 5,
         "total_amount": 2552.75,
@@ -119,7 +119,7 @@
     }, {
         "id": 14,
         "category": "Appliances",
-        "product_name": "Tuna",
+        "product_name": "Blender",
         "unitary_price": 510.55,
         "quantity": 7,
         "total_amount": 3573.85,
@@ -128,7 +128,7 @@
     }, {
         "id": 15,
         "category": "Toys",
-        "product_name": "Sobe",
+        "product_name": "Figurine",
         "unitary_price": 39.36,
         "quantity": 5,
         "total_amount": 196.88,
@@ -146,7 +146,7 @@
     }, {
         "id": 17,
         "category": "Videogames",
-        "product_name": "Quail",
+        "product_name": "Play station",
         "unitary_price": 391.17,
         "quantity": 5,
         "total_amount": 1955.85,
@@ -191,7 +191,7 @@
     }, {
         "id": 22,
         "category": "Photography",
-        "product_name": "Tomatoes",
+        "product_name": "Camera roll",
         "unitary_price": 82.76,
         "quantity": 8,
         "total_amount": 744.84,
@@ -236,7 +236,7 @@
     }, {
         "id": 27,
         "category": "Sports",
-        "product_name": "Wine",
+        "product_name": "Dumbell",
         "unitary_price": 297.76,
         "quantity": 2,
         "total_amount": 595.52,
@@ -254,7 +254,7 @@
     }, {
         "id": 29,
         "category": "Gadgets",
-        "product_name": "Wine",
+        "product_name": "Smart watch",
         "unitary_price": 297.76,
         "quantity": 3,
         "total_amount": 893.28,
@@ -272,7 +272,7 @@
     }, {
         "id": 31,
         "category": "Health",
-        "product_name": "Onions",
+        "product_name": "Med kit",
         "unitary_price": 69.15,
         "quantity": 1,
         "total_amount": 69.15,
@@ -290,7 +290,7 @@
     }, {
         "id": 33,
         "category": "Scientific",
-        "product_name": "Beef",
+        "product_name": "Microscope",
         "unitary_price": 326.26,
         "quantity": 7,
         "total_amount": 2283.82,
@@ -335,7 +335,7 @@
     }, {
         "id": 38,
         "category": "Computers",
-        "product_name": "Wine",
+        "product_name": "Laptop",
         "unitary_price": 297.76,
         "quantity": 7,
         "total_amount": 2084.32,
@@ -344,7 +344,7 @@
     }, {
         "id": 39,
         "category": "Fabrics",
-        "product_name": "Beef",
+        "product_name": "Cotton",
         "unitary_price": 326.26,
         "quantity": 6,
         "total_amount": 1957.56,
@@ -353,7 +353,7 @@
     }, {
         "id": 40,
         "category": "Sewing",
-        "product_name": "Flour",
+        "product_name": "Needle",
         "unitary_price": 349.90,
         "quantity": 5,
         "total_amount": 1749.50,
@@ -371,7 +371,7 @@
     }, {
         "id": 42,
         "category": "Cleaning supplies",
-        "product_name": "Soup",
+        "product_name": "Bleach",
         "unitary_price": 219.20,
         "quantity": 8,
         "total_amount": 1753.60,
@@ -389,7 +389,7 @@
     }, {
         "id": 44,
         "category": "Robotics",
-        "product_name": "Vinegar",
+        "product_name": "Arduino",
         "unitary_price": 289.9,
         "quantity": 5,
         "total_amount": 1449.50,
@@ -425,7 +425,7 @@
     }, {
         "id": 48,
         "category": "Plushies",
-        "product_name": "Beef",
+        "product_name": "Teddy bear",
         "unitary_price": 326.26,
         "quantity": 8,
         "total_amount": 2610.08,

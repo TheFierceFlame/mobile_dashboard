@@ -9,7 +9,7 @@ class ProductMapper {
     price: jsonProduct.unitaryPrice,
     quantity: jsonProduct.quantity,
     total: jsonProduct.totalAmount,
-    date: DateTime.parse(jsonProduct.date.toString()),
+    date: jsonProduct.date,
     coordinates: jsonProduct.coordinates
   );
 }

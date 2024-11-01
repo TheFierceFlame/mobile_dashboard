@@ -44,7 +44,7 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     TopBuyingCustomersChart topClientesCompras = TopBuyingCustomersChart(topBuyingCustomersData: topBuyingCustomers);
     
     return Scaffold(
-      backgroundColor: Colors.black12,
+      backgroundColor: Colors.grey,
       appBar: AppBar(
         backgroundColor: Colors.orange[900],
         centerTitle: true,

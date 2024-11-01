@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class JSONProduct {
   final int? id;
   final String category;
@@ -26,7 +28,7 @@ class JSONProduct {
     unitaryPrice: json['unitary_price'],
     quantity: json['quantity'],
     totalAmount: json['total_amount'],
-    date: json['date'],
+    date: DateFormat("yyyy-MM-dd HH:mm:ss").parse(json['date'].toString().replaceAll('T', ' ')),
     coordinates: json['coordinates']
   );
 }

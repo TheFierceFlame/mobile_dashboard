@@ -16,7 +16,7 @@ List<Color> _sectionsColors = [
   Colors.purple,
   Colors.teal
 ];
-List<String> _topProducts = [];
+List<String> _topCategories = [];
 List<double> _totalAmounts = [];
 
 class ProductsReportChart extends CustomPieChart {
@@ -29,10 +29,10 @@ class ProductsReportChart extends CustomPieChart {
 
   @override
   Widget build(BuildContext context) {
-    _topProducts = [];
+    _topCategories = [];
     _totalAmounts = List.filled(11, 0);
 
-    _getTopProducts();
+    _getTopCategories();
     
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +58,7 @@ class ProductsReportChart extends CustomPieChart {
               children: [
                 _Indicator(
                   color: _sectionsColors[index],
-                  text: '${_topProducts[index]} \$${_totalAmounts[index + 1]}',
+                  text: '${_topCategories[index]} \$${_totalAmounts[index + 1]}',
                 ),
                 const SizedBox(height: 10)
               ],
@@ -75,7 +75,7 @@ class ProductsReportChart extends CustomPieChart {
       const radius = 100.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
       double value = (_totalAmounts[index + 1] / _totalAmounts[0]) * 100;
-
+      
       return PieChartSectionData(
         color: _sectionsColors[index],
         value: value,
@@ -91,38 +91,38 @@ class ProductsReportChart extends CustomPieChart {
     });
   }
 
-  _getTopProducts() {
+  _getTopCategories() {
     List<Product> provisionalData = List.from(productsSalesData);
     List<Map<String, dynamic>> repeatedElements = [];
     int cicle = 0;
-    List<String> topProducts = [];
+    List<String> topCategories = [];
 
     while (cicle < provisionalData.length) {
       Product element = provisionalData[cicle];
       double amount = 0;
       
       for (int repetition = 0; repetition < provisionalData.length; repetition++) {
-        if (repetition == cicle || element.name == provisionalData[repetition].name) {
+        if (repetition == cicle || element.category == provisionalData[repetition].category) {
           amount += provisionalData[repetition].total;
         }
       }
       
-      provisionalData.removeWhere((product) => product.name == element.name);
-      repeatedElements.add({element.name : double.parse(amount.toStringAsFixed(2))});
+      provisionalData.removeWhere((product) => product.category == element.category);
+      repeatedElements.add({element.category : double.parse(amount.toStringAsFixed(2))});
     }
     
     repeatedElements.sort((b, a) => (a[a.keys.toList()[0]]).compareTo(b[b.keys.toList()[0]]));
     
     for(int iteration = 0; iteration < 10; iteration++) {
-      for(var product in productsSalesData.where((element) => element.name == repeatedElements[iteration].keys.toList()[0])) {
-        topProducts.add(product.name);
+      for(var product in productsSalesData.where((element) => element.category == repeatedElements[iteration].keys.toList()[0])) {
+        topCategories.add(product.category);
         _totalAmounts[iteration + 1] += product.total;
       }
 
       _totalAmounts[0] += _totalAmounts[iteration + 1];
     }
 
-    _topProducts = topProducts.toSet().toList();
+    _topCategories = topCategories.toSet().toList();
     
     for(int iteration = 0; iteration < _totalAmounts.length; iteration++) {
       _totalAmounts[iteration] = double.parse(_totalAmounts[iteration].toStringAsFixed(2));

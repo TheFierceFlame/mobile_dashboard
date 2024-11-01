@@ -6,7 +6,7 @@ import 'package:dashboard_app/infrastructure/models/csv/csv_sale.dart';
 import 'package:flutter/services.dart';
 
 class CSVSalesDatasource extends SalesDatasource {
-  final String csvPath = 'data/sales/retail_sales_dataset.csv';
+  final String csvPath = 'assets/data/sales/retail_sales_dataset.csv';
   final Sale emptySale = Sale(
     transactionID: 0,
     date: DateTime.now(),

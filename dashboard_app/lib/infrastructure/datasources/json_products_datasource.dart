@@ -8,9 +8,9 @@ import 'package:flutter/services.dart';
 class JSONProductsDatasource extends ProductsDatasource {
   @override
   Future<List<Product>> getProductsSales() async {
-    final jsonResponse = jsonDecode( await rootBundle.loadString('data/products/products_sales_dataset.json'));
+    final jsonResponse = jsonDecode(await rootBundle.loadString('assets/data/products/products_sales_dataset.json'));
     final List<Product> products = [];
-
+    
     for (int iteration = 0; iteration < jsonResponse.length; iteration++) {
       var jsonProduct = JSONProduct.fromJSON(jsonResponse[iteration]);
       

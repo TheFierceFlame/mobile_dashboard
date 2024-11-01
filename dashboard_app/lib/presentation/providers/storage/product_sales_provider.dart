@@ -3,16 +3,16 @@ import 'package:dashboard_app/presentation/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dashboard_app/domain/entities/product.dart';
 
-final favoriteMoviesProvider = StateNotifierProvider<StorageMoviesNotifier, List<Product>>((ref) {
+final storageProductsSalesProvider = StateNotifierProvider<StorageProductsSalesNotifier, List<Product>>((ref) {
   final localStorageRepository = ref.watch(localStorageRepositoryProvider);
   
-  return StorageMoviesNotifier(localStorageRepository: localStorageRepository);
+  return StorageProductsSalesNotifier(localStorageRepository: localStorageRepository);
 });
 
-class StorageMoviesNotifier extends StateNotifier<List<Product>> {
+class StorageProductsSalesNotifier extends StateNotifier<List<Product>> {
   final LocalStorageRepository localStorageRepository;
 
-  StorageMoviesNotifier({
+  StorageProductsSalesNotifier({
     required this.localStorageRepository
   }): super([]);
 

@@ -1,4 +1,5 @@
 import 'package:dashboard_app/domain/entities/product.dart';
+import 'package:dashboard_app/presentation/providers/analytics/sales/sales_loading_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:animate_do/animate_do.dart';
@@ -16,24 +17,26 @@ class ProductsAnalyticsScreen extends ConsumerStatefulWidget {
 class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen> {
   bool loading = true;
   SlidingUpPanelController panelController = SlidingUpPanelController();
+  List<String> _productsCategories = [];
   List<String> _productsNames = [];
   List<double> _productsPrices = [];
 
   @override
   void initState() {
     super.initState();
-    ref.read(productsSalesProvider.notifier).loadData();
+    ref.read(storageProductsSalesProvider.notifier).loadSales();
   }
 
   @override
   Widget build(BuildContext context) {
-    final initialLoading = ref.watch(productsLoadingProvider);
+    final initialLoading = ref.watch(storageProductsSalesLoadingProvider);
 
     if(initialLoading) return const FullScreenLoader();
 
-    final productsSales = ref.watch(productsSalesProvider);
+    final productsSales = ref.watch(storageProductsSalesProvider);
     ProductsReportChart topProductosVentas = ProductsReportChart(productsSalesData: productsSales);
     
+    _productsCategories = [];
     _productsNames = [];
     _productsPrices = [];
     _getProductsData(productsSales);
@@ -41,7 +44,7 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
     return Stack(
       children: [
         Scaffold(
-          backgroundColor: Colors.black12,
+          backgroundColor: Colors.grey,
           appBar: AppBar(
             backgroundColor: Colors.orange[900],
             centerTitle: true,
@@ -118,6 +121,7 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
         ),
          _CustomSlidingUpPanel(
           panelController: panelController,
+          productsCategories: _productsCategories,
           productsNames: _productsNames,
           productsPrices: _productsPrices,
           callback: _addProductSale,
@@ -127,11 +131,14 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
   }
 
   _getProductsData(List<Product> productsSales) {
-    List<Map<String, dynamic>> productsData = [{'Sin seleccionar' : 0}];
+    List<Map<String, double>> productsData = [{'Sin seleccionar' : 0.0}];
+
+    _productsCategories.add('Sin categoria');
 
     for(var product in productsSales) {
-      if(!productsData.any((element) => element.keys.toList()[0] == product.category)) {
-        productsData.add({product.category : product.price});
+      if(!productsData.any((element) => element.keys.toList()[0] == product.name)) {
+        _productsCategories.add(product.category);
+        productsData.add({product.name : product.price});
       }
     }
 
@@ -142,7 +149,8 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
   }
 
   _addProductSale(Product product) async {
-    
+    await ref.read(storageProductsSalesProvider.notifier).insertProduct(product);
+    await ref.read(storageProductsSalesProvider.notifier).loadSales();
   }
 }
 
@@ -186,12 +194,14 @@ class CustomButton extends StatelessWidget {
 
 class _CustomSlidingUpPanel extends StatefulWidget {
   final SlidingUpPanelController panelController;
+  final List<String> productsCategories;
   final List<String> productsNames;
   final List<double> productsPrices;
   final Function callback;
 
   const _CustomSlidingUpPanel({
     required this.panelController,
+    required this.productsCategories,
     required this.productsNames,
     required this.productsPrices,
     required this.callback
@@ -328,7 +338,7 @@ class _CustomSlidingUpPanelState extends State<_CustomSlidingUpPanel> {
                       onPressed: () {
                         if(dropdownValue != 'Sin seleccionar') {
                           Product product = Product(
-                            category: widget.productsNames[widget.productsNames.indexOf(dropdownValue)],
+                            category: widget.productsCategories[widget.productsNames.indexOf(dropdownValue)],
                             name: dropdownValue,
                             price: widget.productsPrices[widget.productsNames.indexOf(dropdownValue)],
                             quantity: productQuantity,
