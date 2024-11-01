@@ -130,8 +130,8 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
     List<Map<String, dynamic>> productsData = [{'Sin seleccionar' : 0}];
 
     for(var product in productsSales) {
-      if(!productsData.any((element) => element.keys.toList()[0] == product.name)) {
-        productsData.add({product.name : product.unitaryPrice});
+      if(!productsData.any((element) => element.keys.toList()[0] == product.category)) {
+        productsData.add({product.category : product.price});
       }
     }
 
@@ -142,8 +142,7 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
   }
 
   _addProductSale(Product product) async {
-    await ref.read(productsSalesProvider.notifier).addSale(product);
-    await ref.read(productsSalesProvider.notifier).loadData();
+    
   }
 }
 
@@ -329,11 +328,13 @@ class _CustomSlidingUpPanelState extends State<_CustomSlidingUpPanel> {
                       onPressed: () {
                         if(dropdownValue != 'Sin seleccionar') {
                           Product product = Product(
-                            id: 1,
+                            category: widget.productsNames[widget.productsNames.indexOf(dropdownValue)],
                             name: dropdownValue,
-                            unitaryPrice: widget.productsPrices[widget.productsNames.indexOf(dropdownValue)],
+                            price: widget.productsPrices[widget.productsNames.indexOf(dropdownValue)],
                             quantity: productQuantity,
-                            total: productTotal
+                            total: productTotal,
+                            date: DateTime.now(),
+                            coordinates: ''
                           );
                           
                           widget.callback(product);

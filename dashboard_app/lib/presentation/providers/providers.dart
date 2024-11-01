@@ -5,3 +5,5 @@ export 'analytics/products/products_loading_provider.dart';
 export 'analytics/products/products_repository_provider.dart';
 export 'analytics/products/products_provider.dart';
 export 'analytics/filters_provider.dart';
+export 'storage/local_storage_provider.dart';
+export 'storage/product_sales_provider.dart';

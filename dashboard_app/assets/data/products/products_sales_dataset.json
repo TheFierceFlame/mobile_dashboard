@@ -1,603 +1,903 @@
 [
     {
         "id": 1,
+        "category": "Beauty",
         "product_name": "Mousse",
         "unitary_price": 129.57,
         "quantity": 5,
-        "total_amount": 647.85
+        "total_amount": 647.85,
+        "date": "2023-11-24T00:00:00",
+        "coordinates": ""
     }, {
         "id": 2,
+        "category": "Electronics",
         "product_name": "Lamb",
         "unitary_price": 68.38,
         "quantity": 8,
-        "total_amount": 507.04
+        "total_amount": 507.04,
+        "date": "27-02-2023T00:00:00",
+        "coordinates": ""
     }, {
         "id": 3,
+        "category": "Clothing",
         "product_name": "Chicken",
         "unitary_price": 371.88,
         "quantity": 6,
-        "total_amount": 2231.28
+        "total_amount": 2231.28,
+        "date": "2023-01-13T00:00:00",
+        "coordinates": ""
     }, {
         "id": 4,
+        "category": "Shoes",
         "product_name": "Sausage",
         "unitary_price": 754.56,
         "quantity": 3,
-        "total_amount": 2263.68
+        "total_amount": 2263.68,
+        "date": "2023-05-21T00:00:00",
+        "coordinates": ""
     }, {
         "id": 5,
+        "category": "Jewelry",
         "product_name": "Red Snapper",
         "unitary_price": 81.08,
         "quantity": 10,
-        "total_amount": 810.80
+        "total_amount": 810.80,
+        "date": "2023-05-06T00:00:00",
+        "coordinates": ""
     }, {
         "id": 6,
+        "category": "Home",
         "product_name": "Cactus Pads",
         "unitary_price": 1.03,
         "quantity": 5,
-        "total_amount": 5.15
+        "total_amount": 5.15,
+        "date": "2023-04-25T00:00:00",
+        "coordinates": ""
     }, {
         "id": 7,
+        "category": "Kitchen",
         "product_name": "Bread Base",
         "unitary_price": 682.25,
         "quantity": 2,
-        "total_amount": 1364.50
+        "total_amount": 1364.50,
+        "date": "2023-03-13T00:00:00",
+        "coordinates": ""
     }, {
         "id": 8,
+        "category": "Books",
         "product_name": "Veal",
         "unitary_price": 319.08,
         "quantity": 8,
-        "total_amount": 2552.64
+        "total_amount": 2552.64,
+        "date": "2023-02-22T00:00:00",
+        "coordinates": ""
     }, {
         "id": 9,
+        "category": "Automotive",
         "product_name": "Table Cloth",
         "unitary_price": 185.05,
         "quantity": 3,
-        "total_amount": 555.15
+        "total_amount": 555.15,
+        "date": "2023-12-13T00:00:00",
+        "coordinates": ""
     }, {
         "id": 10,
+        "category": "Office",
         "product_name": "Bread",
         "unitary_price": 199.77,
         "quantity": 9,
-        "total_amount": 1797.93
+        "total_amount": 1797.93,
+        "date": "2023-10-07T00:00:00",
+        "coordinates": ""
     }, {
         "id": 11,
+        "category": "Phones",
         "product_name": "Tomatoes",
         "unitary_price": 82.76,
         "quantity": 6,
-        "total_amount": 496.56
+        "total_amount": 496.56,
+        "date": "2023-02-14T00:00:00",
+        "coordinates": ""
     }, {
         "id": 12,
+        "category": "Garden",
         "product_name": "Tea",
         "unitary_price": 396.65,
         "quantity": 1,
-        "total_amount": 396.65
+        "total_amount": 396.65,
+        "date": "2023-10-30T00:00:00",
+        "coordinates": ""
     }, {
         "id": 13,
+        "category": "Outdoors",
         "product_name": "Tuna",
         "unitary_price": 510.55,
         "quantity": 5,
-        "total_amount": 2552.75
+        "total_amount": 2552.75,
+        "date": "2023-08-05T00:00:00",
+        "coordinates": ""
     }, {
         "id": 14,
+        "category": "Appliances",
         "product_name": "Tuna",
         "unitary_price": 510.55,
         "quantity": 7,
-        "total_amount": 3573.85
+        "total_amount": 3573.85,
+        "date": "2023-01-17T00:00:00",
+        "coordinates": ""
     }, {
         "id": 15,
+        "category": "Toys",
         "product_name": "Sobe",
         "unitary_price": 39.36,
         "quantity": 5,
-        "total_amount": 196.88
+        "total_amount": 196.88,
+        "date": "2023-01-16T00:00:00",
+        "coordinates": ""
     }, {
         "id": 16,
+        "category": "Games",
         "product_name": "Yoghurt Tubes",
         "unitary_price": 419.43,
         "quantity": 2,
-        "total_amount": 838.86
+        "total_amount": 838.86,
+        "date": "2023-02-17T00:00:00",
+        "coordinates": ""
     }, {
         "id": 17,
+        "category": "Videogames",
         "product_name": "Quail",
         "unitary_price": 391.17,
         "quantity": 5,
-        "total_amount": 1955.85
+        "total_amount": 1955.85,
+        "date": "2023-04-22T00:00:00",
+        "coordinates": ""
     }, {
         "id": 18,
+        "category": "Grocery",
         "product_name": "Pepper",
         "unitary_price": 329.48,
         "quantity": 3,
-        "total_amount": 988.44
+        "total_amount": 988.44,
+        "date": "2023-04-30T00:00:00",
+        "coordinates": ""
     }, {
         "id": 19,
+        "category": "Pet supplies",
         "product_name": "Oysters",
         "unitary_price": 255.95,
         "quantity": 9,
-        "total_amount": 2303.55
+        "total_amount": 2303.55,
+        "date": "2023-09-16T00:00:00",
+        "coordinates": ""
     }, {
         "id": 20,
+        "category": "Tools",
         "product_name": "Lemons",
         "unitary_price": 217.77,
         "quantity": 5,
-        "total_amount": 1088.85
+        "total_amount": 1088.85,
+        "date": "2023-11-05T00:00:00",
+        "coordinates": ""
     }, {
         "id": 21,
+        "category": "Electronics",
         "product_name": "Sambuca",
         "unitary_price": 757.23,
         "quantity": 7,
-        "total_amount": 5300.61
+        "total_amount": 5300.61,
+        "date": "2023-01-14T00:00:00",
+        "coordinates": ""
     }, {
         "id": 22,
+        "category": "Photography",
         "product_name": "Tomatoes",
         "unitary_price": 82.76,
         "quantity": 8,
-        "total_amount": 744.84
+        "total_amount": 744.84,
+        "date": "2023-10-15T00:00:00",
+        "coordinates": ""
     }, {
         "id": 23,
+        "category": "Art",
         "product_name": "Chutney Sauce",
         "unitary_price": 778.9,
         "quantity": 6,
-        "total_amount": 4673.4
+        "total_amount": 4673.4,
+        "date": "2023-04-12T00:00:00",
+        "coordinates": ""
     }, {
         "id": 24,
+        "category": "Gift cards",
         "product_name": "Tuna",
         "unitary_price": 510.55,
         "quantity": 3,
-        "total_amount": 1531.65
+        "total_amount": 1531.65,
+        "date": "2023-11-29T00:00:00",
+        "coordinates": ""
     }, {
         "id": 25,
+        "category": "Music",
         "product_name": "Bandage",
         "unitary_price": 918.05,
         "quantity": 3,
-        "total_amount": 2754.15
+        "total_amount": 2754.15,
+        "date": "2023-12-26T00:00:00",
+        "coordinates": ""
     }, {
         "id": 26,
+        "category": "Memory drives",
         "product_name": "Rootbeer",
         "unitary_price": 819.15,
         "quantity": 9,
-        "total_amount": 7372.35
+        "total_amount": 7372.35,
+        "date": "2023-10-07T00:00:00",
+        "coordinates": ""
     }, {
         "id": 27,
+        "category": "Sports",
         "product_name": "Wine",
         "unitary_price": 297.76,
         "quantity": 2,
-        "total_amount": 595.52
+        "total_amount": 595.52,
+        "date": "2023-08-03T00:00:00",
+        "coordinates": ""
     }, {
         "id": 28,
+        "category": "Babies",
         "product_name": "Cornflakes",
         "unitary_price": 205.47,
         "quantity": 8,
-        "total_amount": 1643.76
+        "total_amount": 1643.76,
+        "date": "2023-04-23T00:00:00",
+        "coordinates": ""
     }, {
         "id": 29,
+        "category": "Gadgets",
         "product_name": "Wine",
         "unitary_price": 297.76,
         "quantity": 3,
-        "total_amount": 893.28
+        "total_amount": 893.28,
+        "date": "2023-08-18T00:00:00",
+        "coordinates": ""
     }, {
         "id": 30,
+        "category": "Accessories",
         "product_name": "Tart Shells",
         "unitary_price": 59.95,
         "quantity": 7,
-        "total_amount": 419.65
+        "total_amount": 419.65,
+        "date": "2023-10-29T00:00:00",
+        "coordinates": ""
     }, {
         "id": 31,
+        "category": "Health",
         "product_name": "Onions",
         "unitary_price": 69.15,
         "quantity": 1,
-        "total_amount": 69.15
+        "total_amount": 69.15,
+        "date": "2023-05-23T00:00:00",
+        "coordinates": ""
     }, {
         "id": 32,
+        "category": "Industrial",
         "product_name": "Beans",
         "unitary_price": 206.69,
         "quantity": 10,
-        "total_amount": 2066.90
+        "total_amount": 2066.90,
+        "date": "2023-01-04T00:00:00",
+        "coordinates": ""
     }, {
         "id": 33,
+        "category": "Scientific",
         "product_name": "Beef",
         "unitary_price": 326.26,
         "quantity": 7,
-        "total_amount": 2283.82
+        "total_amount": 2283.82,
+        "date": "2023-03-23T00:00:00",
+        "coordinates": ""
     }, {
         "id": 34,
+        "category": "Baggage",
         "product_name": "Pastry",
         "unitary_price": 25.09,
         "quantity": 3,
-        "total_amount": 75.27
+        "total_amount": 75.27,
+        "date": "2023-12-24T00:00:00",
+        "coordinates": ""
     }, {
         "id": 35,
+        "category": "Movies",
         "product_name": "Bananas",
         "unitary_price": 229.83,
         "quantity": 7,
-        "total_amount": 1608.81
+        "total_amount": 1608.81,
+        "date": "2023-08-05T00:00:00",
+        "coordinates": ""
     }, {
         "id": 36,
+        "category": "Software",
         "product_name": "Nestea",
         "unitary_price": 55.87,
         "quantity": 5,
-        "total_amount": 279.35
+        "total_amount": 279.35,
+        "date": "2023-06-24T00:00:00",
+        "coordinates": ""
     }, {
         "id": 37,
+        "category": "Surveillance",
         "product_name": "Onions",
         "unitary_price": 69.15,
         "quantity": 2,
-        "total_amount": 138.30
+        "total_amount": 138.30,
+        "date": "2023-05-23T00:00:00",
+        "coordinates": ""
     }, {
         "id": 38,
+        "category": "Computers",
         "product_name": "Wine",
         "unitary_price": 297.76,
         "quantity": 7,
-        "total_amount": 2084.32
+        "total_amount": 2084.32,
+        "date": "2023-03-21T00:00:00",
+        "coordinates": ""
     }, {
         "id": 39,
+        "category": "Fabrics",
         "product_name": "Beef",
         "unitary_price": 326.26,
         "quantity": 6,
-        "total_amount": 1957.56
+        "total_amount": 1957.56,
+        "date": "2023-04-21T00:00:00",
+        "coordinates": ""
     }, {
         "id": 40,
+        "category": "Sewing",
         "product_name": "Flour",
         "unitary_price": 349.90,
         "quantity": 5,
-        "total_amount": 1749.50
+        "total_amount": 1749.50,
+        "date": "2023-06-22T00:00:00",
+        "coordinates": ""
     }, {
         "id": 41,
+        "category": "Furniture",
         "product_name": "Beets",
         "unitary_price": 630.66,
         "quantity": 6,
-        "total_amount": 3783.96
+        "total_amount": 3783.96,
+        "date": "2023-02-22T00:00:00",
+        "coordinates": ""
     }, {
         "id": 42,
+        "category": "Cleaning supplies",
         "product_name": "Soup",
         "unitary_price": 219.20,
         "quantity": 8,
-        "total_amount": 1753.60
+        "total_amount": 1753.60,
+        "date": "2023-02-17T00:00:00",
+        "coordinates": ""
     }, {
         "id": 43,
+        "category": "Materials",
         "product_name": "Ginger",
         "unitary_price": 918.72,
         "quantity": 3,
-        "total_amount": 2756.16
+        "total_amount": 2756.16,
+        "date": "2023-07-14T00:00:00",
+        "coordinates": ""
     }, {
         "id": 44,
+        "category": "Robotics",
         "product_name": "Vinegar",
         "unitary_price": 289.9,
         "quantity": 5,
-        "total_amount": 1449.50
+        "total_amount": 1449.50,
+        "date": "2023-02-19T00:00:00",
+        "coordinates": ""
     }, {
         "id": 45,
+        "category": "Electricity",
         "product_name": "Honey",
         "unitary_price": 462.39,
         "quantity": 6,
-        "total_amount": 2774.34
+        "total_amount": 2774.34,
+        "date": "2023-07-03T00:00:00",
+        "coordinates": ""
     }, {
         "id": 46,
+        "category": "Hobbies",
         "product_name": "Aspic",
         "unitary_price": 139.38,
         "quantity": 9,
-        "total_amount": 1254.42
+        "total_amount": 1254.42,
+        "date": "2023-06-26T00:00:00",
+        "coordinates": ""
     }, {
         "id": 47,
+        "category": "Puzzles",
         "product_name": "Country",
         "unitary_price": 533.60,
         "quantity": 2,
-        "total_amount": 1067.20
+        "total_amount": 1067.20,
+        "date": "2023-11-06T00:00:00",
+        "coordinates": ""
     }, {
         "id": 48,
+        "category": "Plushies",
         "product_name": "Beef",
         "unitary_price": 326.26,
         "quantity": 8,
-        "total_amount": 2610.08
+        "total_amount": 2610.08,
+        "date": "2023-05-16T00:00:00",
+        "coordinates": ""
     }, {
         "id": 49,
+        "category": "Domotics",
         "product_name": "Quail",
         "unitary_price": 391.17,
         "quantity": 4,
-        "total_amount": 1564.68
+        "total_amount": 1564.68,
+        "date": "2023-01-23T00:00:00",
+        "coordinates": ""
     }, {
         "id": 50,
+        "category": "Design",
         "product_name": "Crab",
         "unitary_price": 268.95,
         "quantity": 8,
-        "total_amount": 2151.60
+        "total_amount": 2151.60,
+        "date": "2023-08-24T00:00:00",
+        "coordinates": ""
     }, {
         "id": 51,
+        "category": "Grocery",
         "product_name": "Grenadillo",
         "unitary_price": 289.81,
         "quantity": 3,
-        "total_amount": 869.43
+        "total_amount": 869.43,
+        "date": "2023-10-02T00:00:00",
+        "coordinates": ""
     }, {
         "id": 52,
+        "category": "Grocery",
         "product_name": "Tomatoes",
         "unitary_price": 82.76,
         "quantity": 4,
-        "total_amount": 331.04
+        "total_amount": 331.04,
+        "date": "2023-03-05T00:00:00",
+        "coordinates": ""
     }, {
         "id": 53,
+        "category": "Grocery",
         "product_name": "Bread",
         "unitary_price": 199.77,
         "quantity": 9,
-        "total_amount": 1797.93
+        "total_amount": 1797.93,
+        "date": "2023-07-13T00:00:00",
+        "coordinates": ""
     }, {
         "id": 54,
+        "category": "Grocery",
         "product_name": "Cream Of Tartar",
         "unitary_price": 270.44,
         "quantity": 8,
-        "total_amount": 2163.52
+        "total_amount": 2163.52,
+        "date": "2023-02-10T00:00:00",
+        "coordinates": ""
     }, {
         "id": 55,
+        "category": "Grocery",
         "product_name": "Cauliflower",
         "unitary_price": 317.05,
         "quantity": 5,
-        "total_amount": 1585.25
+        "total_amount": 1585.25,
+        "date": "2023-10-10T00:00:00",
+        "coordinates": ""
     }, {
         "id": 56,
+        "category": "Cleaning supplies",
         "product_name": "Vinegar",
         "unitary_price": 289.90,
         "quantity": 4,
-        "total_amount": 1159.60
+        "total_amount": 1159.60,
+        "date": "2023-05-31T00:00:00",
+        "coordinates": ""
     }, {
         "id": 57,
+        "category": "Sports",
         "product_name": "Mountain Dew",
         "unitary_price": 211.10,
         "quantity": 3,
-        "total_amount": 633.30
+        "total_amount": 633.30,
+        "date": "2023-11-18T00:00:00",
+        "coordinates": ""
     }, {
         "id": 58,
+        "category": "Hobbies",
         "product_name": "Wine",
         "unitary_price": 297.76,
         "quantity": 1,
-        "total_amount": 297.76
+        "total_amount": 297.76,
+        "date": "2023-11-13T00:00:00",
+        "coordinates": ""
     }, {
         "id": 59,
+        "category": "Health",
         "product_name": "Syrup",
         "unitary_price": 374.83,
         "quantity": 1,
-        "total_amount": 374.83
+        "total_amount": 374.83,
+        "date": "2023-07-05T00:00:00",
+        "coordinates": ""
     }, {
         "id": 60,
+        "category": "Home",
         "product_name": "Straw",
         "unitary_price": 4.85,
         "quantity": 6,
-        "total_amount": 29.10
+        "total_amount": 29.10,
+        "date": "2023-01-23T00:00:00",
+        "coordinates": ""
     }, {
         "id": 61,
+        "category": "Grocery",
         "product_name": "Trout",
         "unitary_price": 4.66,
         "quantity": 4,
-        "total_amount": 18.64
+        "total_amount": 18.64,
+        "date": "2023-04-09T00:00:00",
+        "coordinates": ""
     }, {
         "id": 62,
+        "category": "Grocery",
         "product_name": "Bread",
         "unitary_price": 199.77,
         "quantity": 8,
-        "total_amount": 1598.16
+        "total_amount": 1598.16,
+        "date": "2023-12-27T00:00:00",
+        "coordinates": ""
     }, {
         "id": 63,
+        "category": "Scientific",
         "product_name": "Oil",
         "unitary_price": 124.97,
         "quantity": 3,
-        "total_amount": 374.91
+        "total_amount": 374.91,
+        "date": "2023-02-05T00:00:00",
+        "coordinates": ""
     }, {
         "id": 64,
+        "category": "Home",
         "product_name": "Cup",
         "unitary_price": 9.30,
         "quantity": 8,
-        "total_amount": 74.40
+        "total_amount": 74.40,
+        "date": "2023-01-24T00:00:00",
+        "coordinates": ""
     }, {
         "id": 65,
+        "category": "Kitchen",
         "product_name": "Flour",
         "unitary_price": 349.90,
         "quantity": 1,
-        "total_amount": 349.90
+        "total_amount": 349.90,
+        "date": "2023-12-05T00:00:00",
+        "coordinates": ""
     }, {
         "id": 66,
+        "category": "Kitchen",
         "product_name": "Table",
         "unitary_price": 185.05,
         "quantity": 6,
-        "total_amount": 3764.67
+        "total_amount": 3764.67,
+        "date": "2023-04-27T00:00:00",
+        "coordinates": ""
     }, {
         "id": 67,
+        "category": "Grocery",
         "product_name": "Milk",
         "unitary_price": 567.59,
         "quantity": 3,
-        "total_amount": 1702.77
+        "total_amount": 1702.77,
+        "date": "2023-05-29T00:00:00",
+        "coordinates": ""
     }, {
         "id": 68,
+        "category": "Grocery",
         "product_name": "Cake Slab",
         "unitary_price": 81.79,
         "quantity": 5,
-        "total_amount": 408.95
+        "total_amount": 408.95,
+        "date": "2023-02-10T00:00:00",
+        "coordinates": ""
     }, {
         "id": 69,
+        "category": "Grocery",
         "product_name": "Snapple",
         "unitary_price": 49.50,
         "quantity": 4,
-        "total_amount": 198.00
+        "total_amount": 198.00,
+        "date": "2023-04-30T00:00:00",
+        "coordinates": ""
     }, {
         "id": 70,
+        "category": "Hobbies",
         "product_name": "Tequila Rose Cream Liquor",
         "unitary_price": 553.82,
         "quantity": 2,
-        "total_amount": 1107.64
+        "total_amount": 1107.64,
+        "date": "2023-02-21T00:00:00",
+        "coordinates": ""
     }, {
         "id": 71,
+        "category": "Kitchen",
         "product_name": "Cookie Dough",
         "unitary_price": 71.29,
         "quantity": 3,
-        "total_amount": 213.87
+        "total_amount": 213.87,
+        "date": "2023-07-14T00:00:00",
+        "coordinates": ""
     }, {
         "id": 72,
+        "category": "Grocery",
         "product_name": "Sobe",
         "unitary_price": 39.36,
         "quantity": 10,
-        "total_amount": 393.60
+        "total_amount": 393.60,
+        "date": "2023-05-23T00:00:00",
+        "coordinates": ""
     }, {
         "id": 73,
+        "category": "Grocery",
         "product_name": "Mushroom",
         "unitary_price": 6.48,
         "quantity": 8,
-        "total_amount": 51.84
+        "total_amount": 51.84,
+        "date": "2023-08-21T00:00:00",
+        "coordinates": ""
     }, {
         "id": 74,
+        "category": "Kitchen",
         "product_name": "Truffle Cups",
         "unitary_price": 36.44,
         "quantity": 3,
-        "total_amount": 109.32
+        "total_amount": 109.32,
+        "date": "2023-11-22T00:00:00",
+        "coordinates": ""
     }, {
         "id": 75,
+        "category": "Grocery",
         "product_name": "Lobster",
         "unitary_price": 805.59,
         "quantity": 7,
-        "total_amount": 5639.13
+        "total_amount": 5639.13,
+        "date": "2023-07-06T00:00:00",
+        "coordinates": ""
     }, {
         "id": 76,
+        "category": "Grocery",
         "product_name": "Bread",
         "unitary_price": 199.77,
         "quantity": 8,
-        "total_amount": 1598.16
+        "total_amount": 1598.16,
+        "date": "2023-03-25T00:00:00",
+        "coordinates": ""
     }, {
         "id": 77,
+        "category": "Hobbies",
         "product_name": "Wine",
         "unitary_price": 297.76,
         "quantity": 2,
-        "total_amount": 595.52
+        "total_amount": 595.52,
+        "date": "2023-07-09T00:00:00",
+        "coordinates": ""
     }, {
         "id": 78,
+        "category": "Grocery",
         "product_name": "Bread",
         "unitary_price": 199.77,
         "quantity": 8,
-        "total_amount": 1598.16
+        "total_amount": 1598.16,
+        "date": "2023-07-01T00:00:00",
+        "coordinates": ""
     }, {
         "id": 79,
+        "category": "Grocery",
         "product_name": "Beef",
         "unitary_price": 326.26,
         "quantity": 4,
-        "total_amount": 1305.04
+        "total_amount": 1305.04,
+        "date": "2023-04-18T00:00:00",
+        "coordinates": ""
     }, {
         "id": 80,
+        "category": "Sewing",
         "product_name": "Butcher Twine",
         "unitary_price": 65.06,
         "quantity": 6,
-        "total_amount": 390.36
+        "total_amount": 390.36,
+        "date": "2023-12-10T00:00:00",
+        "coordinates": ""
     }, {
         "id": 81,
+        "category": "Grocery",
         "product_name": "Arctic Char",
         "unitary_price": 818.16,
         "quantity": 2,
-        "total_amount": 1636.32
+        "total_amount": 1636.32,
+        "date": "2023-05-17T00:00:00",
+        "coordinates": ""
     }, {
         "id": 82,
+        "category": "Grocery",
         "product_name": "Beef",
         "unitary_price": 326.26,
         "quantity": 9,
-        "total_amount": 2936.34
+        "total_amount": 2936.34,
+        "date": "2023-12-26T00:00:00",
+        "coordinates": ""
     }, {
         "id": 83,
+        "category": "Home",
         "product_name": "Flower",
         "unitary_price": 5.80,
         "quantity": 8,
-        "total_amount": 46.40
+        "total_amount": 46.40,
+        "date": "2023-12-16T00:00:00",
+        "coordinates": ""
     }, {
         "id": 84,
+        "category": "Grocery",
         "product_name": "Cheese",
         "unitary_price": 234.82,
         "quantity": 7,
-        "total_amount": 1643.74
+        "total_amount": 1643.74,
+        "date": "2023-11-28T00:00:00",
+        "coordinates": ""
     }, {
         "id": 85,
+        "category": "Grocery",
         "product_name": "Assorted Desserts",
         "unitary_price": 145.08,
         "quantity": 2,
-        "total_amount": 290.16
+        "total_amount": 290.16,
+        "date": "2023-02-06T00:00:00",
+        "coordinates": ""
     }, {
         "id": 86,
+        "category": "Grocery",
         "product_name": "Extract Vanilla Pure",
         "unitary_price": 96.80,
         "quantity": 5,
-        "total_amount": 484.00
+        "total_amount": 484.00,
+        "date": "2023-11-08T00:00:00",
+        "coordinates": ""
     }, {
         "id": 87,
+        "category": "Hobbies",
         "product_name": "Jameson Irish Whiskey",
         "unitary_price": 968.41,
         "quantity": 8,
-        "total_amount": 7747.28
+        "total_amount": 7747.28,
+        "date": "2023-11-22T00:00:00",
+        "coordinates": ""
     }, {
         "id": 88,
+        "category": "Grocery",
         "product_name": "Soup",
         "unitary_price": 219.2,
         "quantity": 5,
-        "total_amount": 1096.00
+        "total_amount": 1096.00,
+        "date": "2023-03-29T00:00:00",
+        "coordinates": ""
     }, {
         "id": 89,
+        "category": "Grocery",
         "product_name": "Chicken",
         "unitary_price": 371.88,
         "quantity": 1,
-        "total_amount": 371.88
+        "total_amount": 371.88,
+        "date": "2023-10-01T00:00:00",
+        "coordinates": ""
     }, {
         "id": 90,
+        "category": "Cleaning supplies",
         "product_name": "Broom Handle",
         "unitary_price": 6.98,
         "quantity": 8,
-        "total_amount": 55.84
+        "total_amount": 55.84,
+        "date": "2023-05-06T00:00:00",
+        "coordinates": ""
     }, {
         "id": 91,
+        "category": "Grocery",
         "product_name": "Cookie Trail Mix",
         "unitary_price": 193.97,
         "quantity": 2,
-        "total_amount": 387.94
+        "total_amount": 387.94,
+        "date": "2023-03-25T00:00:00",
+        "coordinates": ""
     }, {
         "id": 92,
+        "category": "Kitchen",
         "product_name": "Truffle Shells",
         "unitary_price": 75.08,
         "quantity": 7,
-        "total_amount": 525.56
+        "total_amount": 525.56,
+        "date": "2023-08-25T00:00:00",
+        "coordinates": ""
     }, {
         "id": 93,
+        "category": "Grocery",
         "product_name": "Ice Cream Bar",
         "unitary_price": 12.04,
         "quantity": 9,
-        "total_amount": 108.36
+        "total_amount": 108.36,
+        "date": "2023-07-14T00:00:00",
+        "coordinates": ""
     }, {
         "id": 94,
+        "category": "Grocery",
         "product_name": "Cheese",
         "unitary_price": 234.82,
         "quantity": 8,
-        "total_amount": 1878.56
+        "total_amount": 1878.56,
+        "date": "2023-05-19T00:00:00",
+        "coordinates": ""
     }, {
         "id": 95,
+        "category": "Cleaning supplies",
         "product_name": "Vaccum Bag",
         "unitary_price": 258.78,
         "quantity": 4,
-        "total_amount": 1035.12
+        "total_amount": 1035.12,
+        "date": "2023-11-24T00:00:00",
+        "coordinates": ""
     }, {
         "id": 96,
+        "category": "Grocery",
         "product_name": "Sobe",
         "unitary_price": 39.36,
         "quantity": 4,
-        "total_amount": 157.44
+        "total_amount": 157.44,
+        "date": "2023-12-19T00:00:00",
+        "coordinates": ""
     }, {
         "id": 97,
+        "category": "Grocery",
         "product_name": "Chinese Lemon Pork",
         "unitary_price": 476.79,
         "quantity": 4,
-        "total_amount": 1907.16
+        "total_amount": 1907.16,
+        "date": "2023-01-13T00:00:00",
+        "coordinates": ""
     }, {
         "id": 98,
+        "category": "Home",
         "product_name": "Towel Dispenser",
         "unitary_price": 2363.65,
         "quantity": 8,
-        "total_amount": 18909.20
+        "total_amount": 18909.20,
+        "date": "2023-04-23T00:00:00",
+        "coordinates": ""
     }, {
         "id": 99,
+        "category": "Hobbies",
         "product_name": "Wine",
         "unitary_price": 297.76,
         "quantity": 5,
-        "total_amount": 1488.80
+        "total_amount": 1488.80,
+        "date": "2023-12-17T00:00:00",
+        "coordinates": ""
     }, {
         "id": 100,
+        "category": "Grocery",
         "product_name": "Gooseberry",
         "unitary_price": 656.27,
         "quantity": 8,
-        "total_amount": 5250.16
+        "total_amount": 5250.16,
+        "date": "2023-06-16T00:00:00",
+        "coordinates": ""
     }
 ]
