@@ -113,7 +113,7 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
               heroTag: "FloatingActionButtonRefresh",
               backgroundColor: Colors.indigo[900],
               onPressed: () {
-                        
+                _clearProductSales();
               },
               child: const Icon(Icons.refresh_outlined),
             ),
@@ -150,6 +150,11 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
 
   _addProductSale(Product product) async {
     await ref.read(storageProductsSalesProvider.notifier).insertProduct(product);
+    await ref.read(storageProductsSalesProvider.notifier).loadSales();
+  }
+
+  _clearProductSales() async {
+    await ref.read(storageProductsSalesProvider.notifier).clearSales();
     await ref.read(storageProductsSalesProvider.notifier).loadSales();
   }
 }

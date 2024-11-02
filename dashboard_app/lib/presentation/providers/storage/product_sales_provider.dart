@@ -16,17 +16,23 @@ class StorageProductsSalesNotifier extends StateNotifier<List<Product>> {
     required this.localStorageRepository
   }): super([]);
 
+  Future<void> insertProduct(Product product) async { 
+    await localStorageRepository.insertProductSale(product);
+
+    state.add(product);
+  }
+
+  Future<void> clearSales() async { 
+    await localStorageRepository.clearProductSales();
+
+    state = [];
+  }
+
   Future<List<Product>> loadSales() async {
     final products = await localStorageRepository.loadProductSales();
 
     state = products;
 
     return products;
-  }
-
-  Future<void> insertProduct(Product product) async { 
-    await localStorageRepository.insertProductSale(product);
-
-    state.add(product);
   }
 }

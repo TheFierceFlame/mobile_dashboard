@@ -13,6 +13,11 @@ class LocalStorageRepositoryImplementation extends LocalStorageRepository {
   }
 
   @override
+  Future<void> clearProductSales() {
+    return datasource.clearProductSales();
+  }
+
+  @override
   Future<List<Product>> loadProductSales() {
     return datasource.loadProductSales();
   }

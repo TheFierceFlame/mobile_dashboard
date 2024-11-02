@@ -37,6 +37,15 @@ class IsarDatasource extends LocalStorageDatasource {
   }
 
   @override
+  Future<void> clearProductSales() async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.products.clear();
+    }); 
+  }
+
+  @override
   Future<List<Product>> loadProductSales() async {
     final isar = await db;
     final count = await isar.products.count();
