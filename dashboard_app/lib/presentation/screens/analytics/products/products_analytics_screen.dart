@@ -6,6 +6,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
 import 'package:dashboard_app/presentation/widgets/widgets.dart';
+import 'package:dashboard_app/presentation/screens/screens.dart';
 
 class ProductsAnalyticsScreen extends ConsumerStatefulWidget {
   const ProductsAnalyticsScreen({super.key});
@@ -100,7 +101,31 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
                         ),
                       ),
                       const Spacer(),
-                      CustomButton(panelController: panelController),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: SizedBox(
+                          width: 400,
+                          child: Material(
+                            color: Colors.indigo[900],
+                            child: InkWell(
+                              onTap: () {
+                                panelController.anchor();
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Registrar venta',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  )
+                                )
+                              )
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -109,17 +134,35 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
           ),
           floatingActionButton: Container(
             margin: const EdgeInsets.only(bottom: 60),
-            child: FloatingActionButton(
-              heroTag: "FloatingActionButtonRefresh",
-              backgroundColor: Colors.indigo[900],
-              onPressed: () {
-                _clearProductSales();
-              },
-              child: const Icon(Icons.refresh_outlined),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  heroTag: "FloatingActionButtonRefresh",
+                  backgroundColor: Colors.indigo[900],
+                  onPressed: () {
+                    _clearProductSales();
+                  },
+                  child: const Icon(Icons.refresh_outlined),
+                ),
+                const SizedBox(height: 10),
+                FloatingActionButton(
+                  heroTag: "FloatingActionButtonTracking",
+                  backgroundColor: Colors.indigo[900],
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return ProductsTrackingScreen();
+                      })
+                    );
+                  },
+                  child: const Icon(Icons.map_outlined),
+                )
+              ],
             ),
           ),
         ),
-         _CustomSlidingUpPanel(
+        CustomSlidingUpPanel(
           panelController: panelController,
           productsCategories: _productsCategories,
           productsNames: _productsNames,
@@ -159,52 +202,15 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
   }
 }
 
-class CustomButton extends StatelessWidget {
-  final SlidingUpPanelController panelController;
-
-  const CustomButton({
-    super.key,
-    required this.panelController
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: SizedBox(
-        width: 400,
-        child: Material(
-          color: Colors.indigo[900],
-          child: InkWell(
-            onTap: () {
-              panelController.anchor();
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Registrar venta',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                )
-              )
-            )
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CustomSlidingUpPanel extends StatefulWidget {
+class CustomSlidingUpPanel extends StatefulWidget {
   final SlidingUpPanelController panelController;
   final List<String> productsCategories;
   final List<String> productsNames;
   final List<double> productsPrices;
   final Function callback;
 
-  const _CustomSlidingUpPanel({
+  const CustomSlidingUpPanel({
+    super.key,
     required this.panelController,
     required this.productsCategories,
     required this.productsNames,
@@ -213,10 +219,10 @@ class _CustomSlidingUpPanel extends StatefulWidget {
   });
 
   @override
-  State<_CustomSlidingUpPanel> createState() => _CustomSlidingUpPanelState();
+  State<CustomSlidingUpPanel> createState() => _CustomSlidingUpPanelState();
 }
 
-class _CustomSlidingUpPanelState extends State<_CustomSlidingUpPanel> {
+class _CustomSlidingUpPanelState extends State<CustomSlidingUpPanel> {
   String dropdownValue = 'Sin seleccionar';
   int productQuantity = 1;
   double productTotal = 0;
@@ -224,13 +230,12 @@ class _CustomSlidingUpPanelState extends State<_CustomSlidingUpPanel> {
   @override
   Widget build(BuildContext context) {
     final quantityController = TextEditingController();
-
     quantityController.text = productQuantity.toString();
 
     return SlidingUpPanelWidget(
       controlHeight: 0,
       anchor: 0.58,
-      minimumBound: 0.42,
+      minimumBound: 0.48,
       upperBound: 1.72,
       panelController: widget.panelController,
       enableOnTap: false,
