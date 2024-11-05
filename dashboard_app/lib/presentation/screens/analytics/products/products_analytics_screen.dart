@@ -348,6 +348,7 @@ class _CustomSlidingUpPanelState extends State<CustomSlidingUpPanel> {
                       onPressed: () {
                         if(dropdownValue != 'Sin seleccionar') {
                           Product product = Product(
+                            id: 0,
                             category: widget.productsCategories[widget.productsNames.indexOf(dropdownValue)],
                             name: dropdownValue,
                             price: widget.productsPrices[widget.productsNames.indexOf(dropdownValue)],

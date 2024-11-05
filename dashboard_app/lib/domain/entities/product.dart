@@ -3,7 +3,7 @@ part 'product.g.dart';
 
 @collection
 class Product {
-  Id? id;
+  final int id;
   final String category;
   final String name;
   final double price;
@@ -13,7 +13,7 @@ class Product {
   final String coordinates;
 
   Product({
-    this.id,
+    required this.id,
     required this.category,
     required this.name,
     required this.price,

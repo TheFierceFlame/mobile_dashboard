@@ -20,6 +20,7 @@ class ProductsTrackingScreen extends ConsumerWidget {
     final productsSalesData = ref.watch(storageProductsSalesAsync);
     String productsSalesDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
+
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
@@ -74,11 +75,13 @@ class ProductsTrackingScreen extends ConsumerWidget {
                   )
                 ),
               ),
-              GoogleMap(
-                initialCameraPosition: const CameraPosition(
-                  target: LatLng(25.790466, -108.985886),
-                  zoom: 20
-                )
+              const Expanded(
+                child: GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(25.790466, -108.985886),
+                    zoom: 13
+                  )
+                ),
               )
             ],
           ),

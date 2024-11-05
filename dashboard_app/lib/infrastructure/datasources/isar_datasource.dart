@@ -17,38 +17,44 @@ class IsarDatasource extends LocalStorageDatasource {
 
   Future<Isar> openDB() async {
     final dir = await getApplicationDocumentsDirectory();
-
-    if (Isar.instanceNames.isEmpty) {
-      return await Isar.open(
-        [ProductSchema],
-        inspector: true,
-        directory: dir.path
-      );
-    }
-
-    return Future.value(Isar.getInstance());
+    
+    return Isar.open(
+      schemas: [ProductSchema],
+      inspector: true,
+      directory: dir.path
+    );
   }
 
   @override
   Future<void> insertProductSale(Product product) async {
-    final isar = await db;
+    final isar = await openDB();
+    final newProduct = Product(
+      id: isar.products.autoIncrement(),
+      category: product.category,
+      name: product.name,
+      price: product.price,
+      quantity: product.quantity,
+      total: product.total,
+      date: product.date,
+      coordinates: product.coordinates
+    );
 
-    isar.writeTxnSync(() => isar.products.putSync(product));
+    await isar.writeAsync((Isar isar) => isar.products.put(newProduct));
   }
 
   @override
   Future<void> clearProductSales() async {
-    final isar = await db;
+    final isar = await openDB();
 
-    await isar.writeTxn(() async {
-      await isar.products.clear();
+    await isar.writeAsync((Isar isar) async {
+      isar.products.clear();
     }); 
   }
 
   @override
   Future<List<Product>> loadProductSales() async {
-    final isar = await db;
-    final count = await isar.products.count();
+    final isar = await openDB();
+    final count = isar.products.count();
 
     if(count == 0) {
       final jsonResponse = json.decode(await rootBundle.loadString('assets/data/products/products_sales_dataset.json'));
@@ -56,7 +62,7 @@ class IsarDatasource extends LocalStorageDatasource {
       for (int iteration = 0; iteration < jsonResponse.length; iteration++) {
         var jsonProduct = JSONProduct.fromJSON(jsonResponse[iteration]);
 
-        isar.writeTxnSync(() => isar.products.putSync(ProductMapper.jsonProductToEntity(jsonProduct)));
+        isar.write((Isar isar) => isar.products.put(ProductMapper.jsonProductToEntity(jsonProduct)));
       }
     }
 

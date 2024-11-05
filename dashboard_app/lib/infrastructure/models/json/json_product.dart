@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 class JSONProduct {
-  final int? id;
+  final int id;
   final String category;
   final String productName;
   final double unitaryPrice;
@@ -11,7 +11,7 @@ class JSONProduct {
   final String coordinates;
 
   JSONProduct({
-    this.id,
+    required this.id,
     required this.category,
     required this.productName,
     required this.unitaryPrice,
