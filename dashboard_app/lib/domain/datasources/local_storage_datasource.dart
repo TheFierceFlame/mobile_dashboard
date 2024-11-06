@@ -4,4 +4,5 @@ abstract class LocalStorageDatasource {
   Future<void> insertProductSale(Product product);
   Future<void> clearProductSales();
   Future<List<Product>> loadProductSales();
+  Future<List<Product>> searchProductSales(DateTime fromDate);
 }

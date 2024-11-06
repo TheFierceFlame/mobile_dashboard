@@ -35,7 +35,7 @@ class ProductsReportChart extends CustomPieChart {
     _getTopCategories();
     
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Expanded(
           child: AspectRatio(
@@ -60,7 +60,7 @@ class ProductsReportChart extends CustomPieChart {
                   color: _sectionsColors[index],
                   text: '${_topCategories[index]} \$${_totalAmounts[index + 1]}',
                 ),
-                const SizedBox(height: 10)
+                const SizedBox(height: 5)
               ],
             );
           }),

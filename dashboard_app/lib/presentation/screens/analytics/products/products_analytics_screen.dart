@@ -1,9 +1,9 @@
 import 'package:dashboard_app/domain/entities/product.dart';
-import 'package:dashboard_app/presentation/providers/analytics/sales/sales_loading_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
 import 'package:dashboard_app/presentation/widgets/widgets.dart';
 import 'package:dashboard_app/presentation/screens/screens.dart';
@@ -16,11 +16,45 @@ class ProductsAnalyticsScreen extends ConsumerStatefulWidget {
 }
 
 class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen> {
-  bool loading = true;
+  final storageProductsSalesAsync = FutureProvider<List<Product>>((ref) async {
+    final productsSalesData = await ref.read(storageProductsSalesProvider.notifier).loadSales();
+
+    return productsSalesData;
+  });
   SlidingUpPanelController panelController = SlidingUpPanelController();
   List<String> _productsCategories = [];
   List<String> _productsNames = [];
   List<double> _productsPrices = [];
+
+  _getProductsData(List<Product> productsSales) {
+    List<Map<String, double>> productsData = [{'Sin seleccionar' : 0.0}];
+
+    _productsCategories.add('Sin categoria');
+
+    for(var product in productsSales) {
+      if(!productsData.any((element) => element.keys.toList()[0] == product.name)) {
+        _productsCategories.add(product.category);
+        productsData.add({product.name : product.price});
+      }
+    }
+
+    for(var element in productsData) {
+      _productsNames.add(element.keys.toList()[0]);
+      _productsPrices.add(element.values.toList()[0]);
+    }
+  }
+
+  _addProductSale(Product product) async {
+    await ref.read(storageProductsSalesProvider.notifier).insertProduct(product);
+    await ref.read(storageProductsSalesProvider.notifier).loadSales();
+    setState(() {});
+  }
+
+  _clearProductSales() async {
+    await ref.read(storageProductsSalesProvider.notifier).clearSales();
+    await ref.read(storageProductsSalesProvider.notifier).loadSales();
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -30,21 +64,16 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
 
   @override
   Widget build(BuildContext context) {
-    final initialLoading = ref.watch(storageProductsSalesLoadingProvider);
-
-    if(initialLoading) return const FullScreenLoader();
-
-    final productsSales = ref.watch(storageProductsSalesProvider);
-    ProductsReportChart topProductosVentas = ProductsReportChart(productsSalesData: productsSales);
-    
+    final productsSales = ref.watch(storageProductsSalesAsync);
+  
     _productsCategories = [];
     _productsNames = [];
     _productsPrices = [];
-    _getProductsData(productsSales);
 
     return Stack(
       children: [
         Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.grey,
           appBar: AppBar(
             backgroundColor: Colors.orange[900],
@@ -70,67 +99,75 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
               child: const Icon(Icons.arrow_back_ios_new_rounded),
             ),
           ),
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16)
-                ),
+          body: productsSales.when(
+            data: (productsSales) {
+              _getProductsData(productsSales);
+
+              return Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: [
-                      const Text('Productos vendidos', style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 18
-                      )),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          height: 600,
-                          width: 380,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16)
-                          ),
-                          child: FadeIn(
-                            duration: const Duration(milliseconds: 500),
-                            child: topProductosVentas
-                          )
-                        ),
-                      ),
-                      const Spacer(),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: SizedBox(
-                          width: 400,
-                          child: Material(
-                            color: Colors.indigo[900],
-                            child: InkWell(
-                              onTap: () {
-                                panelController.anchor();
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Registrar venta',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                  )
-                                )
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        children: [
+                          const Text('Productos vendidos', style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 18
+                          )),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              height: 550,
+                              width: 380,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16)
+                              ),
+                              child: FadeIn(
+                                duration: const Duration(milliseconds: 500),
+                                child: ProductsReportChart(productsSalesData: productsSales)
                               )
                             ),
                           ),
-                        ),
-                      )
-                    ],
+                          const Spacer(),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: SizedBox(
+                              width: 400,
+                              child: Material(
+                                color: Colors.indigo[900],
+                                child: InkWell(
+                                  onTap: () {
+                                    panelController.anchor();
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Registrar venta',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                      )
+                                    )
+                                  )
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
+            error: (_, __) => const CircularProgressIndicator(),
+            loading: () => const CircularProgressIndicator()
           ),
           floatingActionButton: Container(
             margin: const EdgeInsets.only(bottom: 60),
@@ -139,6 +176,7 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
               children: [
                 FloatingActionButton(
                   heroTag: "FloatingActionButtonRefresh",
+                  foregroundColor: Colors.white,
                   backgroundColor: Colors.indigo[900],
                   onPressed: () {
                     _clearProductSales();
@@ -148,11 +186,12 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
                 const SizedBox(height: 10),
                 FloatingActionButton(
                   heroTag: "FloatingActionButtonTracking",
+                  foregroundColor: Colors.white,
                   backgroundColor: Colors.indigo[900],
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) {
-                        return ProductsTrackingScreen();
+                        return const ProductsTrackingScreen();
                       })
                     );
                   },
@@ -171,34 +210,6 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
         )
       ]
     );
-  }
-
-  _getProductsData(List<Product> productsSales) {
-    List<Map<String, double>> productsData = [{'Sin seleccionar' : 0.0}];
-
-    _productsCategories.add('Sin categoria');
-
-    for(var product in productsSales) {
-      if(!productsData.any((element) => element.keys.toList()[0] == product.name)) {
-        _productsCategories.add(product.category);
-        productsData.add({product.name : product.price});
-      }
-    }
-
-    for(var element in productsData) {
-      _productsNames.add(element.keys.toList()[0]);
-      _productsPrices.add(element.values.toList()[0]);
-    }
-  }
-
-  _addProductSale(Product product) async {
-    await ref.read(storageProductsSalesProvider.notifier).insertProduct(product);
-    await ref.read(storageProductsSalesProvider.notifier).loadSales();
-  }
-
-  _clearProductSales() async {
-    await ref.read(storageProductsSalesProvider.notifier).clearSales();
-    await ref.read(storageProductsSalesProvider.notifier).loadSales();
   }
 }
 
@@ -235,8 +246,8 @@ class _CustomSlidingUpPanelState extends State<CustomSlidingUpPanel> {
     return SlidingUpPanelWidget(
       controlHeight: 0,
       anchor: 0.58,
-      minimumBound: 0.48,
-      upperBound: 1.72,
+      minimumBound: 0.30,
+      upperBound: 1.78,
       panelController: widget.panelController,
       enableOnTap: false,
       onStatusChanged: (status) {
@@ -316,10 +327,7 @@ class _CustomSlidingUpPanelState extends State<CustomSlidingUpPanel> {
                   productQuantity = int.parse(quantityController.text);
                   _updateValues(dropdownValue);
                 },
-                onTapOutside: (event) {
-                  productQuantity = int.parse(quantityController.text);
-                  _updateValues(dropdownValue);
-                },
+                
               ),
               const SizedBox(height: 30),
               const Text(
@@ -345,8 +353,30 @@ class _CustomSlidingUpPanelState extends State<CustomSlidingUpPanel> {
                       style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(Colors.indigo[900]),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if(dropdownValue != 'Sin seleccionar') {
+                          bool serviceEnabled;
+                          LocationPermission permission;
+
+                          serviceEnabled = await Geolocator.isLocationServiceEnabled();
+                          if (!serviceEnabled) {
+                            return Future.error('Location services are disabled.');
+                          }
+
+                          permission = await Geolocator.checkPermission();
+                          if (permission == LocationPermission.denied) {
+                            permission = await Geolocator.requestPermission();
+                            if (permission == LocationPermission.denied) {
+                              return Future.error('Location permissions are denied');
+                            }
+                          }
+                          
+                          if (permission == LocationPermission.deniedForever) {
+                            return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+                          } 
+
+                          final currentLocation = await Geolocator.getCurrentPosition();
+                              
                           Product product = Product(
                             id: 0,
                             category: widget.productsCategories[widget.productsNames.indexOf(dropdownValue)],
@@ -355,7 +385,7 @@ class _CustomSlidingUpPanelState extends State<CustomSlidingUpPanel> {
                             quantity: productQuantity,
                             total: productTotal,
                             date: DateTime.now(),
-                            coordinates: ''
+                            coordinates: '${currentLocation.latitude},${currentLocation.longitude}'
                           );
                           
                           widget.callback(product);

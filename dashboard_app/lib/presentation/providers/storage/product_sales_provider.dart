@@ -35,4 +35,12 @@ class StorageProductsSalesNotifier extends StateNotifier<List<Product>> {
 
     return products;
   }
+
+  Future<List<Product>> searchSales(DateTime fromDate) async {
+    final products = await localStorageRepository.searchProductSales(fromDate);
+
+    state = products;
+
+    return products;
+  }
 }

@@ -21,4 +21,9 @@ class LocalStorageRepositoryImplementation extends LocalStorageRepository {
   Future<List<Product>> loadProductSales() {
     return datasource.loadProductSales();
   }
+
+  @override
+  Future<List<Product>> searchProductSales(DateTime fromDate) {
+    return datasource.searchProductSales(fromDate);
+  }
 }

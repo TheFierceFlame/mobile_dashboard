@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dashboard_app/domain/datasources/local_storage_datasource.dart';
 import 'package:dashboard_app/domain/entities/product.dart';
 import 'package:dashboard_app/infrastructure/mappers/json_product_mapper.dart';
@@ -46,9 +45,9 @@ class IsarDatasource extends LocalStorageDatasource {
   Future<void> clearProductSales() async {
     final isar = await openDB();
 
-    await isar.writeAsync((Isar isar) async {
+    isar.write((Isar isar) {
       isar.products.clear();
-    }); 
+    });
   }
 
   @override
@@ -67,5 +66,15 @@ class IsarDatasource extends LocalStorageDatasource {
     }
 
     return isar.products.where().findAll();
+  }
+
+  @override
+  Future<List<Product>> searchProductSales(DateTime fromDate) async {
+    final isar = await openDB();
+    print('///////////////////////${DateTime.parse('${fromDate.toString().split(' ')[0]} 00:00:00')}');
+    return isar.products.where().dateBetween(
+      DateTime.parse('${fromDate.toString().split(' ')[0]} 00:00:00'),
+      DateTime.parse('${fromDate.toString().split(' ')[0]} 23:59:59')
+    ).findAll();
   }
 }
