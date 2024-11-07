@@ -9,6 +9,10 @@ final storageProductsSalesProvider = StateNotifierProvider<StorageProductsSalesN
   return StorageProductsSalesNotifier(localStorageRepository: localStorageRepository);
 });
 
+final storageProductsSalesFiltersProvider = StateProvider<DateTime>((ref) {
+  return DateTime.now();
+});
+
 class StorageProductsSalesNotifier extends StateNotifier<List<Product>> {
   final LocalStorageRepository localStorageRepository;
 

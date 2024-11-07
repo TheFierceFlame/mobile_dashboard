@@ -179,7 +179,7 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.indigo[900],
                   onPressed: () {
-                    _clearProductSales();
+                    //_clearProductSales();
                   },
                   child: const Icon(Icons.refresh_outlined),
                 ),

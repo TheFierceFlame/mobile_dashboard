@@ -9,3 +9,4 @@ export 'charts/products_report_chart.dart';
 export 'filters/daily_sales_filters.dart';
 export 'filters/weekly_sales_filters.dart';
 export 'filters/monthly_sales_filters.dart';
+export 'filters/products_tracking_filters.dart';

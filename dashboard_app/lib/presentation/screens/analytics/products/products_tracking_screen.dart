@@ -5,8 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
-
-DateTime productsSalesDate = DateTime.now();
+import 'package:dashboard_app/presentation/widgets/widgets.dart';
 
 class ProductsTrackingScreen extends ConsumerStatefulWidget {
   const ProductsTrackingScreen({super.key});
@@ -17,29 +16,39 @@ class ProductsTrackingScreen extends ConsumerStatefulWidget {
 
 class ProductsTrackingScreenState extends ConsumerState<ProductsTrackingScreen> {
   final storageProductsSalesAsync = FutureProvider<List<Product>>((ref) async {
-    final productsSalesData = await ref.read(storageProductsSalesProvider.notifier).searchSales(productsSalesDate);
+    final productsSalesData = await ref.read(storageProductsSalesProvider.notifier).searchSales(ref.watch(storageProductsSalesFiltersProvider));
 
     return productsSalesData;
   });
-  Set<Marker> locationMarkers = {};
 
   _getMarkers(List<Product> productsSales) {
+    Set<Marker> markers = {};
+
     for(final (index, product) in productsSales.indexed) {
       var latitude = double.parse(product.coordinates.split(',')[0]);
       var longitude = double.parse(product.coordinates.split(',')[1]);
 
-      locationMarkers.add(Marker(
+      markers.add(Marker(
         markerId: MarkerId('$index'),
         infoWindow: InfoWindow(title: product.name),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         position: LatLng(latitude, longitude)
       ));
     }
+
+    return markers;
+  }
+
+  _filterProductsSales(String date) async {
+    ref.read(storageProductsSalesFiltersProvider.notifier).update((state) => DateTime.parse(date));
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final productsSalesData = ref.watch(storageProductsSalesAsync);
+    DateTime productsSalesDate = ref.watch(storageProductsSalesFiltersProvider);
+    Set<Marker> locationMarkers = {};
     
     return Scaffold(
       backgroundColor: Colors.grey,
@@ -70,7 +79,7 @@ class ProductsTrackingScreenState extends ConsumerState<ProductsTrackingScreen> 
       body: Center(
         child: productsSalesData.when(
           data: (productsSales) {
-            _getMarkers(productsSales);
+            locationMarkers = _getMarkers(productsSales);
 
             return Column(
               children: [
@@ -91,7 +100,12 @@ class ProductsTrackingScreenState extends ConsumerState<ProductsTrackingScreen> 
                         const Spacer(),
                         IconButton(
                           color: Colors.white,
-                          onPressed: () {},
+                          onPressed: () => showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ProductsTrackingFilters(callBack: _filterProductsSales);
+                            },
+                          ),
                           icon: const Icon(Icons.filter_list),
                         )
                       ]

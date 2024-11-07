@@ -71,7 +71,7 @@ class IsarDatasource extends LocalStorageDatasource {
   @override
   Future<List<Product>> searchProductSales(DateTime fromDate) async {
     final isar = await openDB();
-    print('///////////////////////${DateTime.parse('${fromDate.toString().split(' ')[0]} 00:00:00')}');
+    
     return isar.products.where().dateBetween(
       DateTime.parse('${fromDate.toString().split(' ')[0]} 00:00:00'),
       DateTime.parse('${fromDate.toString().split(' ')[0]} 23:59:59')
