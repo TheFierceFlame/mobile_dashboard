@@ -90,7 +90,7 @@ class ProductsTrackingScreenState extends ConsumerState<ProductsTrackingScreen> 
                     child: Row(
                       children: [
                         Text(
-                          'Registros del ${DateFormat('yyyy/MM/dd').format(productsSalesDate)}',
+                          'Registros del ${DateFormat('dd/MM/yyyy').format(productsSalesDate)}',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,

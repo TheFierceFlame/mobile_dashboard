@@ -1,20 +1,17 @@
+import 'package:dashboard_app/domain/entities/client.dart';
+import 'package:dashboard_app/domain/entities/debt.dart';
 import 'package:dashboard_app/domain/entities/product.dart';
 import 'package:dashboard_app/domain/datasources/local_storage_datasource.dart';
 import 'package:dashboard_app/domain/repositories/local_storage_repository.dart';
 
 
-class LocalStorageRepositoryImplementation extends LocalStorageRepository {
-  final LocalStorageDatasource datasource;
-  LocalStorageRepositoryImplementation(this.datasource);
+class ProductsLocalStorageRepositoryImplementation extends ProductsLocalStorageRepository {
+  final ProductsLocalStorageDatasource datasource;
+  ProductsLocalStorageRepositoryImplementation(this.datasource);
 
   @override
   Future<void> insertProductSale(Product product) {
     return datasource.insertProductSale(product);
-  }
-
-  @override
-  Future<void> clearProductSales() {
-    return datasource.clearProductSales();
   }
 
   @override
@@ -25,5 +22,35 @@ class LocalStorageRepositoryImplementation extends LocalStorageRepository {
   @override
   Future<List<Product>> searchProductSales(DateTime fromDate) {
     return datasource.searchProductSales(fromDate);
+  }
+}
+
+class ClientsLocalStorageRepositoryImplementation extends ClientsLocalStorageRepository {
+  final ClientsLocalStorageDatasource datasource;
+  ClientsLocalStorageRepositoryImplementation(this.datasource);
+
+  @override
+  Future<void> insertClient(Client client) {
+    return datasource.insertClient(client);
+  }
+
+  @override
+  Future<void> insertClientDebt(Debt debt, Client client) {
+    return datasource.insertClientDebt(debt, client);
+  }
+
+  @override
+  Future<List<Client>> loadClients() {
+    return datasource.loadClients();
+  }
+
+  @override
+  Future<List<Debt>> loadClientDebts(int clientId) {
+    return datasource.loadClientDebts(clientId);
+  }
+
+  @override
+  Future<void> payDebt(int debtId, double amount) {
+    return datasource.payDebt(debtId, amount);
   }
 }

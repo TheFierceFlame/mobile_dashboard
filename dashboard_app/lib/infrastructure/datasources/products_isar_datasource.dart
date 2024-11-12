@@ -7,53 +7,38 @@ import 'package:flutter/services.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
-class IsarDatasource extends LocalStorageDatasource {
+class ProductsIsarDatasource extends ProductsLocalStorageDatasource {
   late Future<Isar> db;
 
-  IsarDatasource() {
+  ProductsIsarDatasource() {
     db = openDB();
   }
 
   Future<Isar> openDB() async {
     final dir = await getApplicationDocumentsDirectory();
     
-    return Isar.open(
-      schemas: [ProductSchema],
-      inspector: true,
-      directory: dir.path
-    );
+    if (Isar.instanceNames.isEmpty) {
+      return await Isar.open(
+        [ProductSchema],
+        inspector: true,
+        directory: dir.path
+      );
+    }
+
+    return Future.value(Isar.getInstance());
   }
 
   @override
   Future<void> insertProductSale(Product product) async {
-    final isar = await openDB();
-    final newProduct = Product(
-      id: isar.products.autoIncrement(),
-      category: product.category,
-      name: product.name,
-      price: product.price,
-      quantity: product.quantity,
-      total: product.total,
-      date: product.date,
-      coordinates: product.coordinates
-    );
+    final isar = await db;
 
-    await isar.writeAsync((Isar isar) => isar.products.put(newProduct));
-  }
-
-  @override
-  Future<void> clearProductSales() async {
-    final isar = await openDB();
-
-    isar.write((Isar isar) {
-      isar.products.clear();
-    });
+    isar.writeTxnSync(() => isar.products.putSync(product));
   }
 
   @override
   Future<List<Product>> loadProductSales() async {
-    final isar = await openDB();
-    final count = isar.products.count();
+    final isar = await db;
+    final count = await isar.products.count();
 
     if(count == 0) {
       final jsonResponse = json.decode(await rootBundle.loadString('assets/data/products/products_sales_dataset.json'));
@@ -61,7 +46,7 @@ class IsarDatasource extends LocalStorageDatasource {
       for (int iteration = 0; iteration < jsonResponse.length; iteration++) {
         var jsonProduct = JSONProduct.fromJSON(jsonResponse[iteration]);
 
-        isar.write((Isar isar) => isar.products.put(ProductMapper.jsonProductToEntity(jsonProduct)));
+        isar.writeTxnSync(() => isar.products.putSync(ProductMapper.jsonProductToEntity(jsonProduct)));
       }
     }
 
@@ -70,9 +55,9 @@ class IsarDatasource extends LocalStorageDatasource {
 
   @override
   Future<List<Product>> searchProductSales(DateTime fromDate) async {
-    final isar = await openDB();
+    final isar = await db;
     
-    return isar.products.where().dateBetween(
+    return isar.products.filter().dateBetween(
       DateTime.parse('${fromDate.toString().split(' ')[0]} 00:00:00'),
       DateTime.parse('${fromDate.toString().split(' ')[0]} 23:59:59')
     ).findAll();

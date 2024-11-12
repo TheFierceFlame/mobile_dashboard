@@ -50,12 +50,11 @@ dependencies:
   google_maps_flutter: ^2.9.0
   geolocator: ^13.0.1
   permission_handler: ^11.3.1
-  isar:
-    hosted: https://pub.isar-community.dev
-    version: 4.0.3
+  isar: ^3.1.0+1
   isar_flutter_libs:
-    hosted: https://pub.isar-community.dev
-    version: 4.0.3
+    git: 
+        url: https://github.com/MrLittleWhite/isar_flutter_libs.git
+  simple_circular_progress_bar: ^1.0.2
 
 dev_dependencies:
   flutter_test:
@@ -67,7 +66,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
-  
+  isar_generator: ^3.1.0+1
   build_runner: ^2.4.13
 
 # For information on the generic Dart part of this file, see the

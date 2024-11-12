@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dashboard_app/domain/entities/product.dart';
 
 final storageProductsSalesProvider = StateNotifierProvider<StorageProductsSalesNotifier, List<Product>>((ref) {
-  final localStorageRepository = ref.watch(localStorageRepositoryProvider);
+  final localStorageRepository = ref.watch(productsLocalStorageRepositoryProvider);
   
   return StorageProductsSalesNotifier(localStorageRepository: localStorageRepository);
 });
@@ -14,7 +14,7 @@ final storageProductsSalesFiltersProvider = StateProvider<DateTime>((ref) {
 });
 
 class StorageProductsSalesNotifier extends StateNotifier<List<Product>> {
-  final LocalStorageRepository localStorageRepository;
+  final ProductsLocalStorageRepository localStorageRepository;
 
   StorageProductsSalesNotifier({
     required this.localStorageRepository
@@ -24,12 +24,6 @@ class StorageProductsSalesNotifier extends StateNotifier<List<Product>> {
     await localStorageRepository.insertProductSale(product);
 
     state.add(product);
-  }
-
-  Future<void> clearSales() async { 
-    await localStorageRepository.clearProductSales();
-
-    state = [];
   }
 
   Future<List<Product>> loadSales() async {

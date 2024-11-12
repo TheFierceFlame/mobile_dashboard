@@ -50,12 +50,6 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
     setState(() {});
   }
 
-  _clearProductSales() async {
-    await ref.read(storageProductsSalesProvider.notifier).clearSales();
-    await ref.read(storageProductsSalesProvider.notifier).loadSales();
-    setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
@@ -174,16 +168,6 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                FloatingActionButton(
-                  heroTag: "FloatingActionButtonRefresh",
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.indigo[900],
-                  onPressed: () {
-                    //_clearProductSales();
-                  },
-                  child: const Icon(Icons.refresh_outlined),
-                ),
-                const SizedBox(height: 10),
                 FloatingActionButton(
                   heroTag: "FloatingActionButtonTracking",
                   foregroundColor: Colors.white,
