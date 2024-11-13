@@ -1,5 +1,4 @@
 import 'package:dashboard_app/domain/entities/product.dart';
-import 'package:dashboard_app/presentation/widgets/shared/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

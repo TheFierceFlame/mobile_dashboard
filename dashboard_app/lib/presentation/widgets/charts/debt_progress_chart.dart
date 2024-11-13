@@ -14,9 +14,9 @@ class DebtProgressChart extends StatelessWidget {
 
   double _getOpenDebt(List<Debt> debts) {
     double total = 0;
-
+    
     for (var debt in debts) {
-      total += debt.amount;
+      total += debt.payment;
     }
     
     return total;
@@ -25,7 +25,7 @@ class DebtProgressChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final percentage = (_getOpenDebt(clientsDebtsData) / totalDebt) * 100;
-
+    
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

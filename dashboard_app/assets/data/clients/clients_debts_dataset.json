@@ -1,0 +1,58 @@
+[
+    {
+        "name": "Tacos El Pariente",
+        "phone": "6681234567",
+        "location": "25.819202712609275,-108.99194770632019",
+        "debts": [
+            {
+                "motive": "Venta de Productos",
+                "amount": 1000.00,
+                "date": "2024-10-01T00:00:00"
+            }
+        ]
+    }, {
+        "name": "Pescaderia Armenta",
+        "phone": "6687654321",
+        "location": "25.815645686001222,-109.00653893224873",
+        "debts": [
+            {
+                "motive": "Renta de Servicios",
+                "amount": 3200.00,
+                "date": "2024-10-01T00:00:00"
+            }
+        ]
+    }, {
+        "name": "El Oasis",
+        "phone": "6681357642",
+        "location": "25.793697556738042,-108.9933210152849",
+        "debts": [
+            {
+                "motive": "Instalacion de Aplicacion",
+                "amount": 5000.00,
+                "date": "2024-10-01T00:00:00"
+            }
+        ]
+    }, {
+        "name": "La Media Vuelta",
+        "phone": "6682467531",
+        "location": "25.786697509946492,-109.01499171685774",
+        "debts": [
+            {
+                "motive": "Instalacion de Aplicacion",
+                "amount": 5000.00,
+                "date": "2024-10-01T00:00:00"
+            }
+        ]
+    }, {
+        "name": "All you can wings",
+        "phone": "6681010101",
+        "location": "25.79025824100221,-109.00006090336565",
+        "debts": [
+            {
+                "motive": "Renta de Servicios",
+                "amount": 4100.00,
+                "date": "2024-10-01T00:00:00"
+            }
+        ]
+    }
+]

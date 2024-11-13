@@ -1,3 +1,4 @@
+import 'package:dashboard_app/presentation/screens/analytics/debtors/debtors_analytics_screen.dart';
 import 'package:dashboard_app/presentation/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,6 +43,12 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     MonthlySalesChart ventasMensualesChart = MonthlySalesChart(monthlySalesData: monthlySales, monthlySalesDate: ref.read(monthlySalesFiltersProvider));
     TopSellingProductsChart topProductosVentas = TopSellingProductsChart(topSellingProductsData: topSellingProducts);
     TopBuyingCustomersChart topClientesCompras = TopBuyingCustomersChart(topBuyingCustomersData: topBuyingCustomers);
+    final List<String> analyticsScreens = [
+      'AnalyticsScreen',
+      'ProductsAnalyticsScreen',
+      'DebtorsAnalyticsScreen'
+    ];
+    String dropdownValue = 'AnalyticsScreen';
     
     return Scaffold(
       backgroundColor: Colors.grey,
@@ -69,24 +76,55 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all(Colors.white)
+                      child: Container(
+                        height: 70,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16)
                         ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return const ProductsAnalyticsScreen();
-                            })
-                          );
-                        }, 
-                        child: const Text(
-                          'Sucursal A de la Empresa X',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 18
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: DropdownButton(
+                            isExpanded: true,
+                            focusColor: Colors.white,
+                            dropdownColor: Colors.white,
+                            style: const TextStyle(
+                              color: Colors.black87,
+                              fontSize: 18
+                            ),
+                            iconEnabledColor: Colors.black87,
+                            value: dropdownValue,
+                            icon: const Icon(Icons.keyboard_arrow_down),  
+                            items: analyticsScreens.map((String product) {
+                              return DropdownMenuItem(
+                                value: product,
+                                child: Text(product)
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) { 
+                              switch (newValue) {
+                                case "AnalyticsScreen":
+                                  break;
+                                case "ProductsAnalyticsScreen":
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return const ProductsAnalyticsScreen();
+                                    })
+                                  );
+                          
+                                  break;
+                                case "DebtorsAnalyticsScreen":
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return const DebtorsAnalyticsScreen();
+                                    })
+                                  );
+                          
+                                  break;
+                              }
+                            },
                           ),
                         ),
                       ),

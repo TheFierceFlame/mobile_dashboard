@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'package:dashboard_app/domain/datasources/local_storage_datasource.dart';
+import 'package:dashboard_app/domain/entities/client.dart';
+import 'package:dashboard_app/domain/entities/debt.dart';
+import 'package:dashboard_app/domain/entities/payment.dart';
 import 'package:dashboard_app/domain/entities/product.dart';
 import 'package:dashboard_app/infrastructure/mappers/json_product_mapper.dart';
 import 'package:dashboard_app/infrastructure/models/json/json_product.dart';
@@ -19,7 +22,12 @@ class ProductsIsarDatasource extends ProductsLocalStorageDatasource {
     
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open(
-        [ProductSchema],
+        [
+          ProductSchema,
+          ClientSchema,
+          DebtSchema,
+          PaymentSchema
+        ],
         inspector: true,
         directory: dir.path
       );
@@ -32,7 +40,9 @@ class ProductsIsarDatasource extends ProductsLocalStorageDatasource {
   Future<void> insertProductSale(Product product) async {
     final isar = await db;
 
-    isar.writeTxnSync(() => isar.products.putSync(product));
+    await isar.writeTxn(() async {
+      await isar.products.put(product);
+    });
   }
 
   @override
@@ -46,18 +56,20 @@ class ProductsIsarDatasource extends ProductsLocalStorageDatasource {
       for (int iteration = 0; iteration < jsonResponse.length; iteration++) {
         var jsonProduct = JSONProduct.fromJSON(jsonResponse[iteration]);
 
-        isar.writeTxnSync(() => isar.products.putSync(ProductMapper.jsonProductToEntity(jsonProduct)));
+        await isar.writeTxn(() async {
+          await isar.products.put(ProductMapper.jsonProductToEntity(jsonProduct));
+        });
       }
     }
 
-    return isar.products.where().findAll();
+    return await isar.products.where().findAll();
   }
 
   @override
   Future<List<Product>> searchProductSales(DateTime fromDate) async {
     final isar = await db;
     
-    return isar.products.filter().dateBetween(
+    return await isar.products.filter().dateBetween(
       DateTime.parse('${fromDate.toString().split(' ')[0]} 00:00:00'),
       DateTime.parse('${fromDate.toString().split(' ')[0]} 23:59:59')
     ).findAll();

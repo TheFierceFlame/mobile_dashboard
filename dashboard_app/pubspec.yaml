@@ -41,10 +41,7 @@ dependencies:
   fl_chart: ^0.69.0
   csv: ^6.0.0
   flutter_slidable: ^3.1.1
-  flutter_sliding_up_panel: ^2.1.1
-  
   path_provider: ^2.1.5
-  
   dio: ^5.7.0
   flutter_polyline_points: ^2.1.0
   google_maps_flutter: ^2.9.0
@@ -84,6 +81,7 @@ flutter:
   assets:
     - assets/data/sales/retail_sales_dataset.csv
     - assets/data/products/products_sales_dataset.json
+    - assets/data/clients/clients_debts_dataset.json
     - assets/images/Logo.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

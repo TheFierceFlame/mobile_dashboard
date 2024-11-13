@@ -6,11 +6,13 @@ part 'client.g.dart';
 class Client {
   Id id = Isar.autoIncrement;
   final String name;
-  final double phone;
+  final String phone;
+  final String location;
   final debts = IsarLinks<Debt>();
 
   Client({
     required this.name,
     required this.phone,
+    required this.location
   });
 }

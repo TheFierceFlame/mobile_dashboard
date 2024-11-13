@@ -17,14 +17,14 @@ class DebtorsAnalyticsScreen extends ConsumerStatefulWidget {
 }
 
 class DebtorsAnalyticsScreenState extends ConsumerState<DebtorsAnalyticsScreen> {
-  final storageClientsAsync = FutureProvider<List<Client>>((ref) async {
+  final storageClientsAsync = FutureProvider.autoDispose<List<Client>>((ref) async {
     final clientsData = await ref.read(storageClientsProvider.notifier).loadClients();
     List<Debt> debts = [];
     double total = 0;
 
     for (var client in clientsData) {
       final debtsData = await ref.read(storageClientsDebtsProvider.notifier).loadClientDebts(client.id);
-
+      
       for (var debt in debtsData) {
         debts.add(debt);
         total += debt.amount;
@@ -33,7 +33,8 @@ class DebtorsAnalyticsScreenState extends ConsumerState<DebtorsAnalyticsScreen> 
 
     clientsDebts = debts;
     totalDebt = total;
-
+    
+    print(totalDebt);
     return clientsData;
   });
 
@@ -88,18 +89,22 @@ class DebtorsAnalyticsScreenState extends ConsumerState<DebtorsAnalyticsScreen> 
   }
 
   @override
-  void initState() async {
-    super.initState();
-    ref.read(storageClientsProvider.notifier).loadClients();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final clientsData = ref.watch(storageClientsAsync);
-
+    
     return Scaffold(
+      backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: const Text('Deudas por cobrar'),
+        backgroundColor: Colors.orange[900],
+        centerTitle: true,
+        title: const Text(
+          'Deudas por cobrar',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18
+          ),
+        ),
       ),
       body: Center(
         child: Padding(
@@ -126,7 +131,7 @@ class DebtorsAnalyticsScreenState extends ConsumerState<DebtorsAnalyticsScreen> 
                             itemBuilder: (context, index) {
                               final debt = clientsDebts[index];
                               final clientName = debt.client.value?.name ?? 'Cliente desconocido';
-
+                              
                               if(debt.payment == debt.amount) return Container();
 
                               return GestureDetector(
