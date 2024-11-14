@@ -95,17 +95,25 @@ class ClientsIsarDatasource extends ClientsLocalStorageDatasource {
   }
 
   @override
-  Future<List<Debt>> loadClientDebts(int clientId) async {
-    final isar = await db;
-    final client = await isar.clients.get(clientId);
+  Future<List<Debt>> loadClientsDebts() async {
+    final clientsData = await loadClients();
+    List<Debt> debtsData = [];
 
-    if (client == null) {
+    if (clientsData.isEmpty) {
       return [];
     } 
     else {
-      await client.debts.load();
+      for (var client in clientsData) {
+        await client.debts.load();
 
-      return client.debts.toList();
+        final debts = client.debts.toList();
+        
+        for (var debt in debts) {
+          debtsData.add(debt);
+        }
+      }
+
+      return debtsData;
     }
   }
 

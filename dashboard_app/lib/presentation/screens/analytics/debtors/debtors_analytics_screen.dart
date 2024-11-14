@@ -1,12 +1,11 @@
-import 'package:dashboard_app/domain/entities/debt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dashboard_app/domain/entities/debt.dart';
+import 'package:dashboard_app/presentation/screens/analytics/debtors/debtors_tracking_screen.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
-import 'package:dashboard_app/domain/entities/client.dart';
 import 'package:dashboard_app/presentation/widgets/widgets.dart';
 import 'package:intl/intl.dart';
 
-List<Debt> clientsDebts = [];
 double totalDebt = 0;
 
 class DebtorsAnalyticsScreen extends ConsumerStatefulWidget {
@@ -17,81 +16,85 @@ class DebtorsAnalyticsScreen extends ConsumerStatefulWidget {
 }
 
 class DebtorsAnalyticsScreenState extends ConsumerState<DebtorsAnalyticsScreen> {
-  final storageClientsAsync = FutureProvider.autoDispose<List<Client>>((ref) async {
-    final clientsData = await ref.read(storageClientsProvider.notifier).loadClients();
-    List<Debt> debts = [];
-    double total = 0;
-
-    for (var client in clientsData) {
-      final debtsData = await ref.read(storageClientsDebtsProvider.notifier).loadClientDebts(client.id);
-      
-      for (var debt in debtsData) {
-        debts.add(debt);
-        total += debt.amount;
-      }
+  _getTotalDebt(List<Debt> clientsDebts) {
+    for(var debt in clientsDebts) {
+      totalDebt += debt.amount;
     }
+  }
 
-    clientsDebts = debts;
-    totalDebt = total;
-    
-    print(totalDebt);
-    return clientsData;
-  });
+  _addPayment(int debtId, double amount) async {
+    await ref.read(storageClientsDebtsProvider.notifier).payDebt(debtId, amount);
+    await ref.read(storageClientsDebtsProvider.notifier).loadClientsDebts();
+    setState(() {});
+  }
 
-  _showPaymentModal(BuildContext context, int deudaId) {
+  _showPaymentModal(BuildContext context, int debtId, Function callBack) {
     final paymentController = TextEditingController();
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16,
-            right: 16,
-            top: 16,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: paymentController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Monto del Abono',
-                  border: OutlineInputBorder(),
-                ),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter bottomSheetState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                left: 16,
+                right: 16,
+                top: 16,
               ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final amount = double.tryParse(paymentController.text);
-
-                    if (amount == null || amount < 0) return;
-                      
-                    await ref.read(storageClientsDebtsProvider.notifier).payDebt(deudaId, amount);
-                    await ref.read(storageClientsProvider.notifier).loadClients();
-                    setState(() {
-                      Navigator.pop(context);
-                    });
-                  },
-                  child: const Text('Abonar'),
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: paymentController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Monto del Abono',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final amount = double.tryParse(paymentController.text);
+            
+                        if (amount == null || amount < 0) return;
+                          
+                        callBack(debtId, amount);
+                        bottomSheetState(() {
+                          Navigator.pop(context);
+                        });
+                      },
+                      child: const Text('Abonar'),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          }
         );
       },
     );
   }
 
   @override
+  void initState() {
+    super.initState();
+    ref.read(storageClientsDebtsProvider.notifier).loadClientsDebts();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final clientsData = ref.watch(storageClientsAsync);
+    final clientsDebts = ref.watch(storageClientsDebtsProvider);
+
+    if(clientsDebts.isEmpty) return const CircularProgressIndicator();
     
+    _getTotalDebt(clientsDebts);
+
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
@@ -115,77 +118,94 @@ class DebtorsAnalyticsScreenState extends ConsumerState<DebtorsAnalyticsScreen> 
                 child: SingleChildScrollView(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-                    child: clientsData.when(
-                      data: (clients) => Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          DebtProgressChart(
-                            totalDebt: totalDebt,
-                            clientsDebtsData: clientsDebts,
-                          ),
-                          const SizedBox(height: 10),
-                          ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: clientsDebts.length,
-                            itemBuilder: (context, index) {
-                              final debt = clientsDebts[index];
-                              final clientName = debt.client.value?.name ?? 'Cliente desconocido';
-                              
-                              if(debt.payment == debt.amount) return Container();
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        DebtProgressChart(
+                          totalDebt: totalDebt,
+                          clientsDebtsData: clientsDebts,
+                        ),
+                        const SizedBox(height: 10),
+                        ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: clientsDebts.length,
+                          itemBuilder: (context, index) {
+                            final debt = clientsDebts[index];
+                            final clientName = debt.client.value?.name ?? 'Cliente desconocido';
+                                  
+                            if(debt.payment == debt.amount) return Container();
 
-                              return GestureDetector(
-                                onTap: () => _showPaymentModal(context, debt.id),
-                                child: Container(
-                                  margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                                  padding: const EdgeInsets.all(10.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        clientName,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                        'Deuda: ${debt.amount} / Abonado: ${debt.payment}',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                        'Último Abono: ${DateFormat('dd/MM/yyyy').format(debt.lastPaymentDate)}',
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.black54,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                            return GestureDetector(
+                              onTap: () => _showPaymentModal(context, debt.id, _addPayment),
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                                padding: const EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                              );
-                            },
-                          )
-                        ],
-                      ),
-                      error: (_, __) => const CircularProgressIndicator(),
-                      loading: () => const CircularProgressIndicator()
-                    )
-                  ),
-                )
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      clientName,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'Deuda: ${debt.amount} / Abonado: ${debt.payment}',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'Último Abono: ${DateFormat('dd/MM/yyyy').format(debt.lastPaymentDate)}',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                  )
+                ),
               )
             ],
-          ),
+          )
+        ),
+      ),
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(bottom: 60),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              heroTag: "FloatingActionButtonTracking",
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.indigo[900],
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return DebtorsTrackingScreen(clientsDebts: clientsDebts);
+                  })
+                );
+              },
+              child: const Icon(Icons.map_outlined),
+            )
+          ],
         ),
       ),
     );

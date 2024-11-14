@@ -51,12 +51,12 @@ class StorageClientsDebtsNotifier extends StateNotifier<List<Debt>> {
     state.add(debt);
   }
 
-  Future<List<Debt>> loadClientDebts(int clientId) async {
-    final clients = await localStorageRepository.loadClientDebts(clientId);
+  Future<List<Debt>> loadClientsDebts() async {
+    final debts = await localStorageRepository.loadClientsDebts();
 
-    state = clients;
+    state = debts;
 
-    return clients;
+    return debts;
   }
 
   Future<void> payDebt(int debtId, double amount) async {

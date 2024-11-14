@@ -12,6 +12,6 @@ abstract class ClientsLocalStorageDatasource {
   Future<void> insertClient(Client client);
   Future<void> insertClientDebt(Debt debt, Client client);
   Future<List<Client>> loadClients();
-  Future<List<Debt>> loadClientDebts(int clientId);
+  Future<List<Debt>> loadClientsDebts();
   Future<void> payDebt(int debtId, double amount);
 }

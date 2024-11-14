@@ -2,7 +2,7 @@
     {
         "name": "Tacos El Pariente",
         "phone": "6681234567",
-        "location": "25.819202712609275,-108.99194770632019",
+        "location": "25.817395130722172,-108.99259047091869",
         "debts": [
             {
                 "motive": "Venta de Productos",
@@ -13,7 +13,7 @@
     }, {
         "name": "Pescaderia Armenta",
         "phone": "6687654321",
-        "location": "25.815645686001222,-109.00653893224873",
+        "location": "25.814676604270414,-109.0066580474175",
         "debts": [
             {
                 "motive": "Renta de Servicios",
@@ -24,7 +24,7 @@
     }, {
         "name": "El Oasis",
         "phone": "6681357642",
-        "location": "25.793697556738042,-108.9933210152849",
+        "location": "25.792309208833206,-108.99309241977686",
         "debts": [
             {
                 "motive": "Instalacion de Aplicacion",
@@ -35,7 +35,7 @@
     }, {
         "name": "La Media Vuelta",
         "phone": "6682467531",
-        "location": "25.786697509946492,-109.01499171685774",
+        "location": "25.78644614560039,-109.01501595791089",
         "debts": [
             {
                 "motive": "Instalacion de Aplicacion",

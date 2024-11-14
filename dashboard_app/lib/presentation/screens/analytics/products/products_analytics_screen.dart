@@ -42,10 +42,16 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
     }
   }
 
-  _showSaleModal(BuildContext context) {
+  _addProductSale(Product product) async {
+    await ref.read(storageProductsSalesProvider.notifier).insertProduct(product);
+    await ref.read(storageProductsSalesProvider.notifier).loadSales();
+    setState(() {});
+  }
+
+  _showSaleModal(BuildContext context, Function callBack) {
+    final quantityController = TextEditingController();
     int productQuantity = 1;
     double productTotal = 0;
-    final quantityController = TextEditingController();
     String dropdownValue = 'Sin seleccionar';
 
     quantityController.text = productQuantity.toString();
@@ -54,190 +60,193 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Container(
-            height: 450,
-            decoration: const ShapeDecoration(
-              color: Colors.white,
-              shadows: [
-                BoxShadow(
-                  blurRadius: 5.0,
-                  spreadRadius: 2.0,
-                  color: Colors.black12
-                )
-              ],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.0),
-                  topRight: Radius.circular(16.0),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter bottomSheetState) {
+            return Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Container(
+                height: 450,
+                decoration: const ShapeDecoration(
+                  color: Colors.white,
+                  shadows: [
+                    BoxShadow(
+                      blurRadius: 5.0,
+                      spreadRadius: 2.0,
+                      color: Colors.black12
+                    )
+                  ],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16.0),
+                      topRight: Radius.circular(16.0),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 35, right: 35),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 30),
-                  const Text(
-                    'Producto',
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 16
-                    ),
-                  ),
-                  DropdownButton(
-                    isExpanded: true,
-                    style: TextStyle(
-                      color: Colors.orange[900],
-                      fontSize: 16
-                    ),
-                    iconEnabledColor: Colors.black87,
-                    value: dropdownValue,
-                    icon: const Icon(Icons.keyboard_arrow_down),  
-                    items: _productsNames.map((String product) {
-                      return DropdownMenuItem(
-                        value: product,
-                        child: Text(product)
-                      );
-                    }).toList(),
-                    onChanged: (String? product) {
-                      if(product != null) {
-                        setState(() {
-                          dropdownValue = product;
-                          productTotal = double.parse((_productsPrices[_productsNames.indexOf(dropdownValue)] * productQuantity).toStringAsFixed(2));
-                        });
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                  const Text(
-                    'Cantidad',
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 16
-                    ),
-                  ),
-                  TextField(
-                    controller: quantityController,
-                    keyboardType: TextInputType.number,
-                    style: TextStyle(
-                      color: Colors.orange[900],
-                      fontSize: 16
-                    ),
-                    onSubmitted: (value) {
-                      productQuantity = int.parse(quantityController.text);
-                      setState(() {
-                        productTotal = double.parse((_productsPrices[_productsNames.indexOf(dropdownValue)] * productQuantity).toStringAsFixed(2));
-                      });
-                    },
-                    
-                  ),
-                  const SizedBox(height: 30),
-                  const Text(
-                    'Total calculado',
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 16
-                    ),
-                  ),
-                  Text(
-                    '\$$productTotal',
-                    style: TextStyle(
-                      color: Colors.orange[900],
-                      fontSize: 16
-                    ),
-                  ),
-                  const SizedBox(height: 100),
-                  Row(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 35, right: 35),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        width: 150,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll(Colors.indigo[900]),
-                          ),
-                          onPressed: () async {
-                            if(dropdownValue != 'Sin seleccionar') {
-                              bool serviceEnabled;
-                              LocationPermission permission;
-            
-                              serviceEnabled = await Geolocator.isLocationServiceEnabled();
-                              if (!serviceEnabled) {
-                                return Future.error('Location services are disabled.');
-                              }
-            
-                              permission = await Geolocator.checkPermission();
-                              if (permission == LocationPermission.denied) {
-                                permission = await Geolocator.requestPermission();
-                                if (permission == LocationPermission.denied) {
-                                  return Future.error('Location permissions are denied');
-                                }
-                              }
-                              
-                              if (permission == LocationPermission.deniedForever) {
-                                return Future.error('Location permissions are permanently denied, we cannot request permissions.');
-                              } 
-            
-                              final currentLocation = await Geolocator.getCurrentPosition();
-                                  
-                              Product product = Product(
-                                id: 0,
-                                category: _productsCategories[_productsNames.indexOf(dropdownValue)],
-                                name: dropdownValue,
-                                price: _productsPrices[_productsNames.indexOf(dropdownValue)],
-                                quantity: productQuantity,
-                                total: productTotal,
-                                date: DateTime.now(),
-                                coordinates: '${currentLocation.latitude},${currentLocation.longitude}'
-                              );
-                          
-                              await ref.read(storageProductsSalesProvider.notifier).insertProduct(product);
-                              await ref.read(storageProductsSalesProvider.notifier).loadSales();
-                              setState(() {
-                                Navigator.pop(context);
-                              });
-                            }
-                          },
-                          child: const Text(
-                            'Registrar',
-                            style: TextStyle(
-                              color: Colors.white
-                            ),
-                          )
+                      const SizedBox(height: 30),
+                      const Text(
+                        'Producto',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16
                         ),
                       ),
-                      const Spacer(),
-                      SizedBox(
-                        width: 150,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: const WidgetStatePropertyAll(Colors.white),
-                            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24.0),
-                                side: BorderSide(color: Colors.indigo[900]!)
+                      DropdownButton(
+                        isExpanded: true,
+                        style: TextStyle(
+                          color: Colors.orange[900],
+                          fontSize: 16
+                        ),
+                        iconEnabledColor: Colors.black87,
+                        value: dropdownValue,
+                        icon: const Icon(Icons.keyboard_arrow_down),  
+                        items: _productsNames.map((String product) {
+                          return DropdownMenuItem(
+                            value: product,
+                            child: Text(product)
+                          );
+                        }).toList(),
+                        onChanged: (String? product) {
+                          if(product != null) {
+                            bottomSheetState(() {
+                              dropdownValue = product;
+                              productTotal = double.parse((_productsPrices[_productsNames.indexOf(dropdownValue)] * productQuantity).toStringAsFixed(2));
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 30),
+                      const Text(
+                        'Cantidad',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16
+                        ),
+                      ),
+                      TextField(
+                        controller: quantityController,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                          color: Colors.orange[900],
+                          fontSize: 16
+                        ),
+                        onSubmitted: (value) {
+                          productQuantity = int.parse(quantityController.text);
+                          bottomSheetState(() {
+                            productTotal = double.parse((_productsPrices[_productsNames.indexOf(dropdownValue)] * productQuantity).toStringAsFixed(2));
+                          });
+                        },
+                        
+                      ),
+                      const SizedBox(height: 30),
+                      const Text(
+                        'Total calculado',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16
+                        ),
+                      ),
+                      Text(
+                        '\$$productTotal',
+                        style: TextStyle(
+                          color: Colors.orange[900],
+                          fontSize: 16
+                        ),
+                      ),
+                      const SizedBox(height: 100),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 150,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: WidgetStatePropertyAll(Colors.indigo[900]),
+                              ),
+                              onPressed: () async {
+                                if(dropdownValue != 'Sin seleccionar') {
+                                  bool serviceEnabled;
+                                  LocationPermission permission;
+                
+                                  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+                                  if (!serviceEnabled) {
+                                    return Future.error('Location services are disabled.');
+                                  }
+                
+                                  permission = await Geolocator.checkPermission();
+                                  if (permission == LocationPermission.denied) {
+                                    permission = await Geolocator.requestPermission();
+                                    if (permission == LocationPermission.denied) {
+                                      return Future.error('Location permissions are denied');
+                                    }
+                                  }
+                                  
+                                  if (permission == LocationPermission.deniedForever) {
+                                    return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+                                  } 
+                
+                                  final currentLocation = await Geolocator.getCurrentPosition();
+                                      
+                                  Product product = Product(
+                                    id: 0,
+                                    category: _productsCategories[_productsNames.indexOf(dropdownValue)],
+                                    name: dropdownValue,
+                                    price: _productsPrices[_productsNames.indexOf(dropdownValue)],
+                                    quantity: productQuantity,
+                                    total: productTotal,
+                                    date: DateTime.now(),
+                                    coordinates: '${currentLocation.latitude},${currentLocation.longitude}'
+                                  );
+                              
+                                  callBack(product);
+                                  bottomSheetState(() {
+                                    Navigator.pop(context);
+                                  });
+                                }
+                              },
+                              child: const Text(
+                                'Registrar',
+                                style: TextStyle(
+                                  color: Colors.white
+                                ),
                               )
-                            )
+                            ),
                           ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'Cancelar',
-                            style: TextStyle(
-                              color: Colors.indigo[900]
+                          const Spacer(),
+                          SizedBox(
+                            width: 150,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: const WidgetStatePropertyAll(Colors.white),
+                                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24.0),
+                                    side: BorderSide(color: Colors.indigo[900]!)
+                                  )
+                                )
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                'Cancelar',
+                                style: TextStyle(
+                                  color: Colors.indigo[900]
+                                ),
+                              )
                             ),
                           )
-                        ),
+                        ],
                       )
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          }
         );
       },
     );
@@ -322,7 +331,7 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
                                 color: Colors.indigo[900],
                                 child: InkWell(
                                   onTap: () {
-                                    _showSaleModal(context);
+                                    _showSaleModal(context, _addProductSale);
                                   },
                                   child: const Padding(
                                     padding: EdgeInsets.all(8.0),

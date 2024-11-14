@@ -45,8 +45,8 @@ class ClientsLocalStorageRepositoryImplementation extends ClientsLocalStorageRep
   }
 
   @override
-  Future<List<Debt>> loadClientDebts(int clientId) {
-    return datasource.loadClientDebts(clientId);
+  Future<List<Debt>> loadClientsDebts() {
+    return datasource.loadClientsDebts();
   }
 
   @override
