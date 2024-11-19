@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dashboard_app/domain/entities/client.dart';
 import 'package:dashboard_app/domain/entities/debt.dart';
+import 'package:dashboard_app/infrastructure/models/directions.dart';
+import 'package:dashboard_app/domain/repositories/directions_repository.dart';
+
+List<Color> _routesColors = [
+  Colors.blue,
+  Colors.green,
+  Colors.orange,
+  Colors.purple,
+  Colors.pink
+];
 
 class DebtorsTrackingScreen extends ConsumerStatefulWidget {
   final List<Debt> clientsDebts;
@@ -19,8 +28,12 @@ class DebtorsTrackingScreen extends ConsumerStatefulWidget {
 }
 
 class DebtorsTrackingScreenState extends ConsumerState<DebtorsTrackingScreen> {
+  late Position currentLocation;
+  Set<Marker> locationMarkers = {};
+  Set<Polyline> routes = {};
+
   Future<Position> _getCurrentLocation() async {
-    Position currentLocation;
+    Position location;
     bool serviceEnabled;
     LocationPermission permission;
                 
@@ -44,12 +57,15 @@ class DebtorsTrackingScreenState extends ConsumerState<DebtorsTrackingScreen> {
       return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    currentLocation = await Geolocator.getCurrentPosition();
+    location = await Geolocator.getCurrentPosition();
+    currentLocation = location;
+    locationMarkers = await _getMarkers(widget.clientsDebts);
+    routes = await _getOptimumRoute(locationMarkers);
     
-    return currentLocation;
+    return location;
   }
 
-  Set<Marker> _getMarkers(List<Debt> clientsDebts) {
+  Future<Set<Marker>> _getMarkers(List<Debt> clientsDebts) async {
     Set<Client> clients = {};
     Set<Marker> markers = {};
 
@@ -74,36 +90,60 @@ class DebtorsTrackingScreenState extends ConsumerState<DebtorsTrackingScreen> {
     return markers;
   }
 
-  _getOptimumRoute(Set<Marker> clientsLocations) async {
-    Map<int, Map<int, double>> routes = {};
+  Future<Set<Polyline>> _getOptimumRoute(Set<Marker> clientsLocations) async {
+    LatLng originPosition = LatLng(currentLocation.latitude, currentLocation.longitude);
+    Set<Marker> locations = Set.from(clientsLocations);
+    Set<Polyline> routePoints = {};
+    int colorIndex = 0;
 
     for(int iteration = 0; iteration < clientsLocations.length; iteration++) {
+      List<Directions> availableDirections = [];
       Map<int, double> distances = {};
-      LatLng locationPosition = clientsLocations.elementAt(iteration).position;
-
-      for(int cicle = 0; iteration < clientsLocations.length; cicle++) {
-        if (iteration == cicle) continue;
-
-        LatLng destinationPosition = clientsLocations.elementAt(cicle).position;
-        double distanceInMeters = Geolocator.bearingBetween(
-          locationPosition.latitude,
-          locationPosition.longitude,
-          destinationPosition.latitude,
-          destinationPosition.longitude
+      int selectedIndex = 0;
+      
+      for(int cicle = 0; cicle < locations.length; cicle++) {
+        Directions directions = await DirectionsRepository().getDirections(
+          LatLng(originPosition.latitude, originPosition.longitude),
+          LatLng(
+            locations.elementAt(cicle).position.latitude,
+            locations.elementAt(cicle).position.longitude
+          )
         );
-
-        distances.addAll({cicle: distanceInMeters});
+        
+        availableDirections.add(directions);
+        distances.addAll({cicle: double.parse(directions.totalDistance.split('km')[0])});
       }
 
-      routes.addAll({iteration: distances});
+      double minimalDistance = double.infinity;
+
+      for(var distance in distances.entries) {
+        if(distance.value < minimalDistance) {
+          minimalDistance = distance.value;
+          selectedIndex = distance.key;
+        }
+      }
+      
+      originPosition = LatLng(
+        locations.elementAt(selectedIndex).position.latitude,
+        locations.elementAt(selectedIndex).position.longitude
+      );
+      locations.remove(locations.elementAt(selectedIndex));
+      routePoints.add(
+        Polyline(
+          polylineId: PolylineId('$iteration'),
+          color: _routesColors[colorIndex],
+          width: 5,
+          points: availableDirections[selectedIndex].polylinePoints.map((point) => LatLng(point.latitude, point.longitude)).toList()
+        )
+      );
+      colorIndex == _routesColors.length - 1 ? colorIndex = 0 : colorIndex++;
     }
+
+    return routePoints;
   }
 
   @override
   Widget build(BuildContext context) {
-    Set<Marker> locationMarkers = _getMarkers(widget.clientsDebts);
-    late PolylinePoints routePoints;
-    
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
@@ -143,6 +183,7 @@ class DebtorsTrackingScreenState extends ConsumerState<DebtorsTrackingScreen> {
                   ),
                   myLocationEnabled: true,
                   markers: locationMarkers,
+                  polylines: routes
                 ),
               );
             }
