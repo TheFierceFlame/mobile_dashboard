@@ -52,6 +52,9 @@ dependencies:
     git: 
         url: https://github.com/MrLittleWhite/isar_flutter_libs.git
   simple_circular_progress_bar: ^1.0.2
+  firebase_core: ^3.8.0
+  firebase_messaging: ^15.1.5
+  flutter_local_notifications: ^18.0.1
 
 dev_dependencies:
   flutter_test:
