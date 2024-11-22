@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:dashboard_app/presentation/screens/screens.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,13 +13,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(milliseconds: 3000), () {
-      if (!mounted) return;
-      Navigator.pushReplacement(
-        context, 
-        MaterialPageRoute(builder: (context) {
-          return const AnalyticsScreen();
-        })
-      );
+      if(!mounted) return;
+      context.go('/Analytics');
     });
 
     super.initState();

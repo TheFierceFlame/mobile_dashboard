@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:dashboard_app/main.dart';
 
 class FirebaseAPI {
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -15,15 +16,17 @@ class FirebaseAPI {
   void handleMessage(RemoteMessage? message) {
     if(message == null) return;
 
-    //ToDo: Enrutamiento con datos de una notificacion
+    if(message.data['FirstName'] == 'Routing') {
+      router.go('/${message.data['LastName']}');
+    }
   }
 
   Future<void> handleBackgroundMessage(RemoteMessage message) async {
-
+    
   }
 
   Future<void> initializeLocalNotifications() async {
-    const androidSettings = AndroidInitializationSettings('@mipmap-xxxhdpi/ic_launcher.png');
+    const androidSettings = AndroidInitializationSettings('@drawable/ic_launcher');
     const settings = InitializationSettings(android: androidSettings);
 
     await _localNotifications.initialize(
@@ -46,7 +49,7 @@ class FirebaseAPI {
       badge: true,
       sound: true
     );
-    _firebaseMessaging.getInitialMessage().then(handleMessage);
+    FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
     FirebaseMessaging.onMessage.listen((message) {
@@ -63,7 +66,7 @@ class FirebaseAPI {
             _androidChannel.id,
             _androidChannel.name,
             channelDescription: _androidChannel.description,
-            icon: '@mipmap-xxxhdpi/ic_launcher.png'
+            icon: '@drawable/ic_launcher'
           )
         ),
         payload: jsonEncode(message.toMap())

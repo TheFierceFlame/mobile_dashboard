@@ -4,6 +4,7 @@ import 'package:dashboard_app/domain/entities/debt.dart';
 import 'package:dashboard_app/presentation/screens/analytics/debtors/debtors_tracking_screen.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
 import 'package:dashboard_app/presentation/widgets/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 double totalDebt = 0;
@@ -107,6 +108,18 @@ class DebtorsAnalyticsScreenState extends ConsumerState<DebtorsAnalyticsScreen> 
             fontWeight: FontWeight.bold,
             fontSize: 18
           ),
+        ),
+        leading: FloatingActionButton(
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.orange[900],
+          elevation: 0,
+          focusElevation: 0,
+          hoverElevation: 0,
+          highlightElevation: 0,
+          onPressed: () {
+            context.go('/Analytics');
+          },
+          child: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
       ),
       body: Center(

@@ -1,11 +1,10 @@
-import 'package:dashboard_app/presentation/screens/analytics/debtors/debtors_analytics_screen.dart';
-import 'package:dashboard_app/presentation/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
 import 'package:dashboard_app/presentation/widgets/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:go_router/go_router.dart';
 
 class AnalyticsScreen extends ConsumerStatefulWidget {
   const AnalyticsScreen({super.key});
@@ -106,21 +105,11 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                                 case "AnalyticsScreen":
                                   break;
                                 case "ProductsAnalyticsScreen":
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) {
-                                      return const ProductsAnalyticsScreen();
-                                    })
-                                  );
+                                  context.go('/ProductsAnalytics');
                           
                                   break;
                                 case "DebtorsAnalyticsScreen":
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) {
-                                      return const DebtorsAnalyticsScreen();
-                                    })
-                                  );
+                                  context.go('/DebtorsAnalytics');
                           
                                   break;
                               }

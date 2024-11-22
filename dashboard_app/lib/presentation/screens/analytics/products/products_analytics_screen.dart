@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
 import 'package:dashboard_app/presentation/widgets/widgets.dart';
 import 'package:dashboard_app/presentation/screens/screens.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductsAnalyticsScreen extends ConsumerStatefulWidget {
   const ProductsAnalyticsScreen({super.key});
@@ -283,7 +284,7 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
               hoverElevation: 0,
               highlightElevation: 0,
               onPressed: () {
-                Navigator.of(context).pop();
+                context.go('/Analytics');
               },
               child: const Icon(Icons.arrow_back_ios_new_rounded),
             ),
