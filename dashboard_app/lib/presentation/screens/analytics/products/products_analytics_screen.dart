@@ -7,6 +7,7 @@ import 'package:dashboard_app/presentation/providers/providers.dart';
 import 'package:dashboard_app/presentation/widgets/widgets.dart';
 import 'package:dashboard_app/presentation/screens/screens.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductsAnalyticsScreen extends ConsumerStatefulWidget {
   const ProductsAnalyticsScreen({super.key});
@@ -364,6 +365,69 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                FloatingActionButton(
+                  heroTag: "FloatingActionButtonHelp",
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.indigo[900],
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      Uri url = Uri.parse('https://wa.me/5216679156784?text=Invitame');
+                      Uri phone = Uri.parse('tel:+526679156784');
+                      
+                      return AlertDialog(
+                        backgroundColor: Colors.orange[900],
+                        content: SizedBox(
+                          height: 140,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Envia un mensaje a nuestro equipo de soporte y ellos te ayudarán. Puedes elegir entre llamar o enviar un mensaje por WhatsApp al teléfono de ayuda.',
+                                  maxLines: 5,
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    MaterialButton(
+                                      minWidth: 60,
+                                      child: const Text("Llamar"),
+                                      onPressed: () async {
+                                        if (!await launchUrl(phone)) {
+                                          throw Exception('No se pudo abrir $url');
+                                        }
+                                      },
+                                    ),
+                                    MaterialButton(
+                                      minWidth: 60,
+                                      child: const Text("Mensaje"),
+                                      onPressed: () async {
+                                        if (!await launchUrl(url)) {
+                                          throw Exception('No se pudo abrir $url');
+                                        }
+                                      }
+                                    ),
+                                    MaterialButton(
+                                      minWidth: 60,
+                                      child: const Text("Cancelar"),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    )
+                                  ]
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  ),
+                  child: const Icon(Icons.question_mark_outlined),
+                ),
+                const SizedBox(height: 10),
                 FloatingActionButton(
                   heroTag: "FloatingActionButtonTracking",
                   foregroundColor: Colors.white,
