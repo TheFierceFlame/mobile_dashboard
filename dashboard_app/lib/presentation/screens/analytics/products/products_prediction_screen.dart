@@ -14,8 +14,8 @@ class ProductsPredictionScreen extends ConsumerStatefulWidget {
 
 class ProductsPredictionScreenState extends ConsumerState<ProductsPredictionScreen> {
   final storageProductsPredictionAsync = FutureProvider.autoDispose<List<Prediction>>((ref) async {
-    final productsPredictionsData = await ref.read(predictionsProvider.notifier).loadPredictions();
-
+    final productsPredictionsData = await ref.read(predictionsProvider.notifier).loadData();
+    
     return productsPredictionsData;
   });
 

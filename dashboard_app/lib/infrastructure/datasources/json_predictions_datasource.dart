@@ -14,7 +14,7 @@ class JSONPredictionsDatasource extends PredictionsDatasource {
   Future<List<Prediction>> getPredictions() async {
     final productsSalesData = await ProductsIsarDatasource().loadProductSales();
     List<Map<String, dynamic>> productsSalesJSON = [];
-
+    
     for(Product product in productsSalesData) {
       productsSalesJSON.add(JSONProduct(
         id: product.id!,
@@ -28,14 +28,13 @@ class JSONPredictionsDatasource extends PredictionsDatasource {
       ).toJSON());
     }
 
-        
     final response = await dio.post(
       '/Calculate',
       data: productsSalesJSON
     );
     final Map<String, dynamic> predictions = response.data['results'];
     List<Prediction> predictionsData = [];
-
+    
     predictions.forEach((key, value) {
       predictionsData.add(PredictionMapper.jsonProductToEntity(JSONPrediction.fromJSON({key: value})));
     });
