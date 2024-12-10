@@ -429,6 +429,20 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
                 ),
                 const SizedBox(height: 10),
                 FloatingActionButton(
+                  heroTag: "FloatingActionButtonPrediction",
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.indigo[900],
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return const ProductsPredictionScreen();
+                      })
+                    );
+                  },
+                  child: const Icon(Icons.query_stats_outlined),
+                ),
+                const SizedBox(height: 10),
+                FloatingActionButton(
                   heroTag: "FloatingActionButtonTracking",
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.indigo[900],

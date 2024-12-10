@@ -31,4 +31,15 @@ class JSONProduct {
     date: DateFormat("yyyy-MM-dd HH:mm:ss").parse(json['date'].toString().replaceAll('T', ' ')),
     coordinates: json['coordinates']
   );
+
+  Map<String, dynamic> toJSON() => {
+    "id": id,
+    "category": category,
+    "product_name": productName,
+    "unitary_price": unitaryPrice,
+    "quantity": quantity,
+    "total_amount": totalAmount,
+    "date": date.toString(),
+    "coordinates": coordinates
+  };
 }

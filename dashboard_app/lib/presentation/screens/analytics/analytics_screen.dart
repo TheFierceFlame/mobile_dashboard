@@ -53,6 +53,7 @@ class AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       backgroundColor: Colors.grey,
       appBar: AppBar(
         backgroundColor: Colors.orange[900],
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: const Text(
           'Estadísticas y Seguimiento',

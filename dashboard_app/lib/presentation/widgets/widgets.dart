@@ -6,6 +6,7 @@ export 'charts/monthly_sales_chart.dart';
 export 'charts/top_selling_products_chart.dart';
 export 'charts/top_buying_customers_chart.dart';
 export 'charts/products_report_chart.dart';
+export 'charts/sales_tendencies_chart.dart';
 export 'charts/debt_progress_chart.dart';
 export 'filters/daily_sales_filters.dart';
 export 'filters/weekly_sales_filters.dart';
