@@ -293,8 +293,7 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
           body: productsSales.when(
             data: (productsSales) {
               _getProductsData(productsSales);
-              print(productsSales.first.id);
-              print(productsSales.last.id);
+              
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
