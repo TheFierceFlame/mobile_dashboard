@@ -193,7 +193,7 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
                                   final currentLocation = await Geolocator.getCurrentPosition();
                                       
                                   Product product = Product(
-                                    id: 0,
+                                    id: null,
                                     category: _productsCategories[_productsNames.indexOf(dropdownValue)],
                                     name: dropdownValue,
                                     price: _productsPrices[_productsNames.indexOf(dropdownValue)],
@@ -293,7 +293,8 @@ class ProductsAnalyticsScreenState extends ConsumerState<ProductsAnalyticsScreen
           body: productsSales.when(
             data: (productsSales) {
               _getProductsData(productsSales);
-
+              print(productsSales.first.id);
+              print(productsSales.last.id);
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),

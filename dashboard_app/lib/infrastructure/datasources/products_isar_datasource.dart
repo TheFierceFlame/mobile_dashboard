@@ -49,10 +49,10 @@ class ProductsIsarDatasource extends ProductsLocalStorageDatasource {
   Future<List<Product>> loadProductSales() async {
     final isar = await db;
     final count = await isar.products.count();
-
+    
     if(count == 0) {
       final jsonResponse = json.decode(await rootBundle.loadString('assets/data/products/products_sales_dataset.json'));
-
+      
       for (int iteration = 0; iteration < jsonResponse.length; iteration++) {
         var jsonProduct = JSONProduct.fromJSON(jsonResponse[iteration]);
 
